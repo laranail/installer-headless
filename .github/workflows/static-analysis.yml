@@ -1,0 +1,31 @@
+name: Static analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  static:
+    name: Pint · PHPStan · Rector
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: dom, curl, libxml, mbstring, zip, fileinfo, sodium
+          coverage: none
+      - name: Resolve laranail packages from VCS
+        run: |
+          composer config repositories.package-tools vcs https://github.com/laranail/package-tools
+          composer config repositories.console vcs https://github.com/laranail/console
+          composer config repositories.license-verifier vcs https://github.com/laranail/license-verifier
+      - name: Install dependencies
+        run: composer update --prefer-stable --no-interaction --no-progress
+      - name: Pint
+        run: vendor/bin/pint --test
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --error-format=github
+      - name: Rector
+        run: vendor/bin/rector process --dry-run --no-progress-bar

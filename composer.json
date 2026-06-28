@@ -1,0 +1,117 @@
+{
+    "name": "laranail/installer-headless",
+    "description": "Headless, framework-friendly Laravel application installer engine — requirements checks, .env generate/update, DB connection test, migration/seeder runner, admin creation, pluggable step pipeline, install lock, and CLI/TUI. Web UI ships separately in laranail/installer-web.",
+    "keywords": [
+        "laravel",
+        "installer",
+        "setup",
+        "wizard",
+        "headless",
+        "env",
+        "cli",
+        "laranail"
+    ],
+    "homepage": "https://opensource.simtabi.com/installer-headless/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simtabi LLC",
+            "email": "opensource@simtabi.com",
+            "homepage": "https://opensource.simtabi.com",
+            "role": "Organization"
+        },
+        {
+            "name": "Imani Manyara",
+            "email": "imani@simtabi.com",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/laranail/installer-headless/issues",
+        "source": "https://github.com/laranail/installer-headless",
+        "docs": "https://opensource.simtabi.com/installer-headless/docs/"
+    },
+    "require": {
+        "php": "^8.4.1 || ^8.5",
+        "ext-json": "*",
+        "illuminate/console": "^13.0",
+        "illuminate/contracts": "^13.0",
+        "illuminate/database": "^13.0",
+        "illuminate/filesystem": "^13.0",
+        "illuminate/http": "^13.0",
+        "illuminate/support": "^13.0",
+        "illuminate/validation": "^13.0",
+        "laranail/console": "^1.1",
+        "laranail/license-verifier": "^0.1",
+        "laranail/package-tools": "^1.0",
+        "laravel/prompts": "^0.3.18 || ^1.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.8",
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-arch": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "rector/rector": "^2.0",
+        "roave/security-advisories": "dev-latest",
+        "spatie/laravel-permission": "^6.0 || ^7.0",
+        "laranail/database-tools": "^1.0"
+    },
+    "suggest": {
+        "laranail/database-tools": "Enables the optional SQL-dump import step (ImportDatabaseStep)."
+    },
+    "repositories": {
+        "package-tools": { "type": "path", "url": "../../package/tools" },
+        "console": { "type": "path", "url": "../../tools/console" },
+        "license-verifier": { "type": "path", "url": "../../licensing/verifier" },
+        "database-tools": { "type": "path", "url": "../../database-tools" }
+    },
+    "autoload": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Installer\\Headless\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Installer\\Headless\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest --colors=always",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "lint": ["@pint", "@analyse", "@rector"],
+        "pint": "vendor/bin/pint --test",
+        "format": "vendor/bin/pint",
+        "rector": "vendor/bin/rector process --dry-run",
+        "rector-fix": "vendor/bin/rector process",
+        "audit": "@composer audit"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Simtabi\\Laranail\\Installer\\Headless\\Providers\\InstallerServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
