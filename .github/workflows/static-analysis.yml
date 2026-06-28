@@ -20,11 +20,11 @@ jobs:
           php-version: '8.5'
           extensions: dom, curl, libxml, mbstring, zip, fileinfo, sodium
           coverage: none
-      - name: Resolve laranail packages from VCS
+      # Only license-verifier isn't on Packagist yet; git-clone it (no-api) to dodge
+      # GitHub REST API rate limits. Other laranail deps resolve from Packagist.
+      - name: Resolve unpublished laranail packages from VCS
         run: |
-          composer config repositories.package-tools vcs https://github.com/laranail/package-tools
-          composer config repositories.console vcs https://github.com/laranail/console
-          composer config repositories.license-verifier vcs https://github.com/laranail/license-verifier
+          composer config repositories.license-verifier '{"type":"vcs","url":"https://github.com/laranail/license-verifier","no-api":true}'
       - name: Install dependencies
         run: composer update --prefer-stable --no-interaction --no-progress
       - name: Pint
