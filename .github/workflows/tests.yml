@@ -25,13 +25,14 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, fileinfo, pdo, sqlite3, pdo_sqlite, sodium
           coverage: none
-      # CI has no local sibling checkouts, so override the committed `path` repo for the
-      # one sibling not yet on Packagist (license-verifier). package-tools, console and
-      # database-tools resolve from Packagist. `no-api: true` makes composer git-clone
-      # the repo instead of hitting the GitHub REST API (avoids HTTP 429 rate limits).
-      - name: Resolve unpublished laranail packages from VCS
+      # CI has no local sibling checkouts, so override every committed `path` repo
+      # (used for local cross-package dev) with its public GitHub source. `no-api: true`
+      # git-clones the repo instead of hitting the GitHub REST API (avoids HTTP 429).
+      - name: Resolve laranail packages from VCS
         run: |
-          composer config repositories.license-verifier '{"type":"vcs","url":"https://github.com/laranail/license-verifier","no-api":true}'
+          for pkg in package-tools console license-verifier database-tools; do
+            composer config "repositories.$pkg" "{\"type\":\"vcs\",\"url\":\"https://github.com/laranail/$pkg\",\"no-api\":true}"
+          done
       - name: Install dependencies
         run: |
           if [ "${{ matrix.dependency-versions }}" = "prefer-lowest" ]; then
