@@ -19,10 +19,11 @@ final class EnvUpdateCommand extends Command
     public function handle(EnvWriter $writer): int
     {
         $path = (string) (config('installer.env.path') ?: base_path('.env'));
+        $key = (string) $this->argument('key');
 
-        $writer->update($path, [(string) $this->argument('key') => (string) $this->argument('value')]);
+        $writer->update($path, [$key => (string) $this->argument('value')]);
 
-        $this->info("Updated {$this->argument('key')} in {$path}.");
+        $this->info("Updated {$key} in {$path}.");
 
         return self::SUCCESS;
     }
