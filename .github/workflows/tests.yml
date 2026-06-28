@@ -9,6 +9,10 @@ jobs:
   pest:
     name: PHP ${{ matrix.php }} · ${{ matrix.dependency-versions }}
     runs-on: ubuntu-latest
+    env:
+      # Authenticate composer's GitHub API access so VCS resolution of sibling
+      # laranail packages isn't rate-limited (HTTP 429) on unauthenticated runners.
+      COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}'
     strategy:
       fail-fast: false
       matrix:

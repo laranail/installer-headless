@@ -9,6 +9,10 @@ jobs:
   static:
     name: Pint · PHPStan · Rector
     runs-on: ubuntu-latest
+    env:
+      # Authenticate composer's GitHub API access so VCS resolution of sibling
+      # laranail packages isn't rate-limited (HTTP 429) on unauthenticated runners.
+      COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}'
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2

@@ -10,6 +10,8 @@ jobs:
   release:
     name: Publish GitHub release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Extract this version's CHANGELOG section
