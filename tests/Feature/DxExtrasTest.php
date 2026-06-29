@@ -5,8 +5,8 @@ declare(strict_types=1);
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Schema;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
-use Simtabi\Laranail\Installer\Headless\Events\StepFailed;
 use Simtabi\Laranail\Installer\Headless\Notifications\InstallationCompleted;
 use Simtabi\Laranail\Installer\Headless\Notifications\InstallationFailed;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
@@ -57,7 +57,7 @@ it('sends completion + failure notifications when enabled', function (): void {
     config()->set('installer.notifications.mail.to', ['ops@example.com']);
 
     InstallerFinished::dispatch();
-    StepFailed::dispatch('migrate', new RuntimeException('boom'));
+    InstallerFailed::dispatch('migrate', new RuntimeException('boom'));
 
     Notification::assertSentOnDemand(InstallationCompleted::class);
     Notification::assertSentOnDemand(InstallationFailed::class);

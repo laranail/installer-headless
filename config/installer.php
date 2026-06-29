@@ -303,15 +303,25 @@ return [
     | Notifications
     |--------------------------------------------------------------------------
     |
-    | Off by default. When enabled, install completion/failure is emailed to the
-    | listed recipients (on-demand mail notifications — no notifiable required).
+    | Off by default. When enabled, install completion/failure is sent to the listed
+    | recipients (on-demand notifications — no notifiable required). Channels are
+    | pluggable: `channels` lists the notification channels (default `mail`); the
+    | `mail` channel routes to `mail.to`, other channels to `routes.<channel>`.
+    | `security` is a separate, independently-enabled stream for access-denied alerts.
     |
     */
 
     'notifications' => [
         'enabled' => env('INSTALLER_NOTIFICATIONS', false),
+        'channels' => array_filter(explode(',', (string) env('INSTALLER_NOTIFY_CHANNELS', 'mail'))),
         'mail' => [
             'to' => array_filter(explode(',', (string) env('INSTALLER_NOTIFY_EMAILS', ''))),
+        ],
+        // Per-channel routes for non-mail channels, e.g. ['slack' => 'https://hooks.slack…'].
+        'routes' => [],
+        'security' => [
+            'enabled' => env('INSTALLER_SECURITY_ALERTS', false),
+            'to' => array_filter(explode(',', (string) env('INSTALLER_SECURITY_ALERT_EMAILS', ''))),
         ],
     ],
 

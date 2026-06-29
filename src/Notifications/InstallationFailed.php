@@ -6,21 +6,17 @@ namespace Simtabi\Laranail\Installer\Headless\Notifications;
 
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Simtabi\Laranail\Installer\Headless\Notifications\Concerns\RoutesViaConfiguredChannels;
 
 /**
- * Sent (on the `mail` channel) when an installation step fails.
+ * Sent when the installation fails. Channels come from
+ * `installer.notifications.channels` (default `mail`).
  */
 final class InstallationFailed extends Notification
 {
-    public function __construct(public readonly string $step, public readonly string $reason) {}
+    use RoutesViaConfiguredChannels;
 
-    /**
-     * @return list<string>
-     */
-    public function via(object $notifiable): array
-    {
-        return ['mail'];
-    }
+    public function __construct(public readonly string $step, public readonly string $reason) {}
 
     public function toMail(object $notifiable): MailMessage
     {
@@ -30,5 +26,13 @@ final class InstallationFailed extends Notification
             ->greeting('Installation failed')
             ->line("The installer failed during the [{$this->step}] step.")
             ->line($this->reason);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
+    {
+        return ['event' => 'installer.failed', 'step' => $this->step, 'reason' => $this->reason];
     }
 }

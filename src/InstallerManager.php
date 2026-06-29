@@ -14,6 +14,7 @@ use Simtabi\Laranail\Installer\Headless\Support\ProductRegistry;
 use Simtabi\Laranail\Installer\Headless\Support\StepFieldHooks;
 use Simtabi\Laranail\Installer\Headless\Support\StepPipelines;
 use Simtabi\Laranail\Installer\Headless\Users\UserCreationHooks;
+use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
 use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
@@ -144,6 +145,23 @@ class InstallerManager
     public function created(Closure $callback): static
     {
         $this->userHooks->created($callback);
+
+        return $this;
+    }
+
+    /**
+     * Register extra user-form fields for a role (rendered + validated + persisted
+     * as attributes). The provider receives the role and context and returns Fields:
+     *
+     *   Installer::userFields(fn (?string $role, array $ctx) => [
+     *       new Field('company', 'Company', 'text', '', ['required', 'string', 'max:120']),
+     *   ]);
+     *
+     * @param  callable(?string, array<string, mixed>): iterable<Field>  $provider
+     */
+    public function userFields(callable $provider): static
+    {
+        app(UserFormHooks::class)->fields($provider);
 
         return $this;
     }
