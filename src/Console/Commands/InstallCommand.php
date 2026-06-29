@@ -11,6 +11,7 @@ use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
 use Simtabi\Laranail\Console\Progress\ProgressReporter;
+use Simtabi\Laranail\Installer\Headless\Console\Commands\Concerns\GuardsInstallerAccess;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
 use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
@@ -28,6 +29,8 @@ use Simtabi\Laranail\Installer\Headless\Wizard\Field;
  */
 final class InstallCommand extends Command
 {
+    use GuardsInstallerAccess;
+
     protected $signature = 'laranail::installer.install
         {--field=* : Set any step field as name=value (repeatable, e.g. --field=first_name=Ada)}
         {--app-name= : Application name}
@@ -44,6 +47,7 @@ final class InstallCommand extends Command
         {--locale=en : UI locale}
         {--product= : Install only this product slug (its own pipeline)}
         {--all-products : Install every registered product, each with isolated state}
+        {--token= : Installer access token (required when one is configured)}
         {--force : Re-run even if already installed}';
 
     protected $description = 'Install the application (headless).';
@@ -66,6 +70,10 @@ final class InstallCommand extends Command
 
     public function handle(InstallerEngine $engine, InstallationState $state, ProductRegistry $products): int
     {
+        if (! $this->guardAccess()) {
+            return self::FAILURE;
+        }
+
         $force = (bool) $this->option('force');
 
         foreach ($this->resolveTargets($products) as $slug) {

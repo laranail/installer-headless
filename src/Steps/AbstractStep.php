@@ -39,6 +39,20 @@ abstract class AbstractStep implements Step
         return $translated === $line ? ucfirst(str_replace(['-', '_'], ' ', $this->key)) : (string) $translated;
     }
 
+    /**
+     * Best-effort raise of the PHP execution-time limit for long-running steps
+     * (migrations, imports) on hosts with a low `max_execution_time`. No-op when
+     * `installer.environment.time_limit` is null or set_time_limit is disabled.
+     */
+    protected function raiseTimeLimit(): void
+    {
+        $limit = config('installer.environment.time_limit');
+
+        if ($limit !== null && function_exists('set_time_limit')) {
+            @set_time_limit((int) $limit);
+        }
+    }
+
     public function priority(): int
     {
         return (int) config("installer.steps.{$this->key}.priority", $this->defaultPriority);

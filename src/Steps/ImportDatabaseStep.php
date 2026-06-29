@@ -35,6 +35,8 @@ class ImportDatabaseStep extends AbstractStep
 
     public function run(InstallerContext $context): void
     {
+        $this->raiseTimeLimit();
+
         $path = (string) ($context->input('path') ?? config('installer.database.import.path', ''));
 
         if ($path === '') {

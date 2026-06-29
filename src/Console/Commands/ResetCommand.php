@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Console\Commands;
 
 use Illuminate\Support\Facades\App;
+use Simtabi\Laranail\Installer\Headless\Console\Commands\Concerns\GuardsInstallerAccess;
 use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
 /**
@@ -13,12 +14,18 @@ use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
  */
 final class ResetCommand extends Command
 {
-    protected $signature = 'laranail::installer.reset {--force : Allow running in production}';
+    use GuardsInstallerAccess;
+
+    protected $signature = 'laranail::installer.reset {--token= : Installer access token (required when one is configured)} {--force : Allow running in production}';
 
     protected $description = 'Reset installer state (dev/local).';
 
     public function handle(InstallationState $state): int
     {
+        if (! $this->guardAccess()) {
+            return self::FAILURE;
+        }
+
         if (App::environment('production') && ! $this->option('force')) {
             $this->error('Refusing to reset installer state in production. Use --force to override.');
 

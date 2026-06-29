@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Support;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Simtabi\Laranail\Installer\Headless\Events\EnvironmentSaved;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
 use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
 use Simtabi\Laranail\Installer\Headless\Events\StepFailed;
 use Simtabi\Laranail\Installer\Headless\Events\StepStarted;
+use Simtabi\Laranail\Installer\Headless\Events\UnauthorizedInstallerAccess;
+use Simtabi\Laranail\Installer\Headless\Events\UserCreated;
 
 /**
  * Structured, secret-safe logging of installer lifecycle events. Sensitive
@@ -45,13 +50,40 @@ final readonly class InstallerEventLogger
         $this->log('finished', []);
     }
 
+    public function handleStarted(InstallerStarted $event): void
+    {
+        $this->log('started', ['product' => $event->product]);
+    }
+
+    public function handleFailed(InstallerFailed $event): void
+    {
+        $this->log('failed', ['step' => $event->step, 'error' => $event->exception->getMessage()], 'error');
+    }
+
+    public function handleUserCreated(UserCreated $event): void
+    {
+        // Identifier only — never the password/PII carried on the UserData payload.
+        $id = $event->user instanceof Model ? $event->user->getKey() : null;
+
+        $this->log('user.created', ['user' => is_scalar($id) ? $id : null]);
+    }
+
+    public function handleUnauthorized(UnauthorizedInstallerAccess $event): void
+    {
+        $this->log('unauthorized', ['reason' => $event->reason, 'ip' => $event->ip, 'path' => $event->path], 'warning');
+    }
+
     public function subscribe(): array
     {
         return [
+            InstallerStarted::class => 'handleStarted',
             StepStarted::class => 'handleStepStarted',
             StepCompleted::class => 'handleStepCompleted',
             StepFailed::class => 'handleStepFailed',
             EnvironmentSaved::class => 'handleEnvironmentSaved',
+            UserCreated::class => 'handleUserCreated',
+            InstallerFailed::class => 'handleFailed',
+            UnauthorizedInstallerAccess::class => 'handleUnauthorized',
             InstallerFinished::class => 'handleFinished',
         ];
     }

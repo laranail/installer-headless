@@ -22,6 +22,7 @@ php artisan laranail::installer.install \
 | `--db-name` | database name, or the file path for sqlite |
 | `--product=<slug>` | install one product's pipeline (see [steps.md](steps.md#multi-product-installs-per-product-pipeline-orchestrator)) |
 | `--all-products` | install every registered product, each with isolated state |
+| `--token` | required when an installer access token is configured (see [security.md](security.md)) |
 | `--force` | re-run even if already installed |
 
 The command renders a **live install dashboard** — a progress bar over the steps
@@ -49,6 +50,12 @@ without `--force`.
 ## `laranail::installer.env {key} {value}`
 
 Sets a single `.env` key, preserving comments/formatting, written atomically.
+
+## `laranail::installer.token`
+
+Generates a secure installer access token (and its hash). `--write` stores
+`INSTALLER_TOKEN` in `.env`; `--hash` stores the hashed `INSTALLER_TOKEN_HASH`. See
+[security.md](security.md). (`reset`/`env` also accept `--token`.)
 
 License operations (activate/verify/deactivate/status) are provided by
 `laranail/license-verifier`'s own commands and are not duplicated here.

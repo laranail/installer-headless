@@ -6,6 +6,7 @@ namespace Simtabi\Laranail\Installer\Headless\Users;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Simtabi\Laranail\Installer\Headless\Events\UserCreated;
 use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 use Throwable;
 
@@ -39,11 +40,15 @@ final readonly class UserAccountCreator
     {
         $creator = config('installer.user.creator');
 
-        if ($creator !== null) {
-            return $this->runOverride($creator, $data);
-        }
+        $user = $creator !== null
+            ? $this->runOverride($creator, $data)
+            : $this->createDefault($data);
 
-        return $this->createDefault($data);
+        // The listenable counterpart to the `created` hook — fires for the default
+        // path, the override path, and every row of createMany().
+        UserCreated::dispatch($user, $data);
+
+        return $user;
     }
 
     /**

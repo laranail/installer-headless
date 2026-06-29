@@ -133,6 +133,19 @@ final class InstallationState
         $this->flush();
     }
 
+    /**
+     * Purge the persisted per-step input (captured form values), leaving install
+     * markers intact. Used after a successful install so no collected credentials/
+     * secrets linger in the state file.
+     */
+    public function clearInput(): void
+    {
+        $state = $this->readState();
+        unset($state['input']);
+
+        $this->writeState($state);
+    }
+
     public function markStepComplete(string $step): void
     {
         $state = $this->readState();

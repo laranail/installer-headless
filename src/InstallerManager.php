@@ -13,7 +13,9 @@ use Simtabi\Laranail\Installer\Headless\Support\ProductPipeline;
 use Simtabi\Laranail\Installer\Headless\Support\ProductRegistry;
 use Simtabi\Laranail\Installer\Headless\Support\StepFieldHooks;
 use Simtabi\Laranail\Installer\Headless\Support\StepPipelines;
+use Simtabi\Laranail\Installer\Headless\Testing\InstallerFake;
 use Simtabi\Laranail\Installer\Headless\Users\UserCreationHooks;
+use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
 use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
@@ -148,6 +150,23 @@ class InstallerManager
         return $this;
     }
 
+    /**
+     * Register extra user-form fields for a role (rendered + validated + persisted
+     * as attributes). The provider receives the role and context and returns Fields:
+     *
+     *   Installer::userFields(fn (?string $role, array $ctx) => [
+     *       new Field('company', 'Company', 'text', '', ['required', 'string', 'max:120']),
+     *   ]);
+     *
+     * @param  callable(?string, array<string, mixed>): iterable<Field>  $provider
+     */
+    public function userFields(callable $provider): static
+    {
+        app(UserFormHooks::class)->fields($provider);
+
+        return $this;
+    }
+
     // --- Events -----------------------------------------------------------
 
     /**
@@ -158,5 +177,18 @@ class InstallerManager
         Event::listen($event, $listener);
 
         return $this;
+    }
+
+    // --- Testing ----------------------------------------------------------
+
+    /**
+     * Swap the installer's lifecycle events for a recording fake and return it, so
+     * tests can assert against the installer (e.g. Installer::fake()->assertFinished()).
+     */
+    public function fake(): InstallerFake
+    {
+        Event::fake(InstallerFake::EVENTS);
+
+        return new InstallerFake;
     }
 }

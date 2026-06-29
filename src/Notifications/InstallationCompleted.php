@@ -6,20 +6,16 @@ namespace Simtabi\Laranail\Installer\Headless\Notifications;
 
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Simtabi\Laranail\Installer\Headless\Notifications\Concerns\RoutesViaConfiguredChannels;
 
 /**
- * Sent (on the `mail` channel) when installation completes successfully. Uses the
- * default MailMessage template, so no view files ship with the package.
+ * Sent when installation completes successfully. Channels come from
+ * `installer.notifications.channels` (default `mail`); uses the default MailMessage
+ * template, so no view files ship with the package.
  */
 final class InstallationCompleted extends Notification
 {
-    /**
-     * @return list<string>
-     */
-    public function via(object $notifiable): array
-    {
-        return ['mail'];
-    }
+    use RoutesViaConfiguredChannels;
 
     public function toMail(object $notifiable): MailMessage
     {
@@ -28,5 +24,13 @@ final class InstallationCompleted extends Notification
             ->greeting('Installation complete')
             ->line(config('app.name', 'The application') . ' has been installed successfully.')
             ->line('You can now sign in and start using it.');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
+    {
+        return ['event' => 'installer.completed', 'app' => config('app.name')];
     }
 }

@@ -7,6 +7,8 @@ namespace Simtabi\Laranail\Installer\Headless;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Validation\ValidationException;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
 use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
 use Simtabi\Laranail\Installer\Headless\Events\StepFailed;
 use Simtabi\Laranail\Installer\Headless\Events\StepStarted;
@@ -338,6 +340,8 @@ class InstallerEngine
     {
         if (! $this->state->isInstalling() && ! $this->state->hasInstalledMarker()) {
             $this->state->markInstalling();
+
+            InstallerStarted::dispatch($this->pipeline instanceof ProductPipeline ? $this->pipeline->slug : null);
         }
     }
 
@@ -351,6 +355,7 @@ class InstallerEngine
             throw $exception;
         } catch (Throwable $exception) {
             StepFailed::dispatch($step->key(), $exception);
+            InstallerFailed::dispatch($step->key(), $exception);
 
             throw $exception instanceof InstallerException
                 ? $exception
