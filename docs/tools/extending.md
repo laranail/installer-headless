@@ -16,6 +16,9 @@ public function boot(): void
         ->field('environment', new Field('region', 'Region', 'select', 'eu', options: ['eu' => 'EU', 'us' => 'US']))
         ->pipe('user', NormaliseEmail::class)            // per-step input transform (pre-validation)
         ->creating(fn ($data) => null)                   // user-creation lifecycle hook
+        ->userFields(fn (?string $role, array $ctx) => [ // extra user-form fields per role
+            new Field('company', 'Company', 'text', '', ['required', 'string', 'max:120']),
+        ])
         ->product('addon', ['type' => 'module'])         // a product pipeline
         ->listen(StepCompleted::class, fn ($e) => logger($e->step));
 }
@@ -106,5 +109,12 @@ runtime.
   **never** store closures in `config()` (it breaks `config:cache`).
 - The web UI consumes the same registries; anything you register here applies to both
   the CLI and the web wizard.
+
+## See also
+
+- [events.md](events.md) — the lifecycle events you can `listen()` to, the notification
+  layer, and `Installer::fake()` for tests.
+- [security.md](security.md) — the access-lockdown layer.
+- [panels.md](panels.md) — making Filament/Nova succeed via these seams.
 
 [← Docs index](../../README.md#documentation)

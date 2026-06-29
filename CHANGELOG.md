@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Lifecycle events:** `InstallerStarted`, `UserCreated`, top-level `InstallerFailed`,
+  and `UnauthorizedInstallerAccess` (security/audit), all logged secret-free.
+- **Access lockdown** (`installer.security.*`, all off by default, fails closed):
+  IP allowlist (CIDR), allowed hosts, HTTPS enforcement, a secret token/password gate
+  (raw or hashed, optional single-use + signed links), an availability window
+  (timezone-aware), configurable throttling + gate lockout, security response headers,
+  and hardened auto-disable (404 + input purge) after install. Policy in
+  `Security\InstallerAccessPolicy`; `laranail::installer.token` generates a token; the
+  state-changing CLI commands honour `--token`.
+- **Notifications:** pluggable channels (`notifications.channels` + `routes`) and a
+  separate security-alert stream (`UnauthorizedAccessAlert`); failure now notifies on
+  the top-level `InstallerFailed`; sends are synchronous and wrapped.
+- **`Installer::userFields()`** DSL and **`Installer::fake()`** test seam.
+- **Shared-hosting support** (`installer.environment.*`): forced file session/cache
+  for installer requests, `EnvWriter` `copy()` fallback, `set_time_limit` on long
+  steps, streamed user import, and requirements warnings (disabled functions, limits,
+  db-backed stores) with the fresh-install `.env`-writable false-negative fixed.
+
 ## [0.1.0] - 2026-06-28
 
 First public release. The pre-1.0 development history below is folded into this

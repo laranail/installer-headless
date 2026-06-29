@@ -105,6 +105,10 @@ under `docs/`:
 - [Environment files](docs/tools/env.md) — `EnvFile`/`EnvWriter` (generate + update)
 - [Extending steps](docs/tools/steps.md) — add/insert/reorder/replace; `ChoiceStep`; per-product pipelines
 - [Runtime DSL](docs/tools/extending.md) — the `Installer` facade: reshape steps/fields/hooks/pipelines from your provider
+- [Access lockdown](docs/tools/security.md) — IP allowlist, token/password gate, time window, throttling, headers, auto-disable
+- [Events & notifications](docs/tools/events.md) — lifecycle events, the notification layer, `Installer::fake()`
+- [Shared hosting](docs/tools/shared-hosting.md) — cPanel/no-SSH: file stores, permissions, web-driven setup
+- [Admin panels](docs/tools/panels.md) — make Filament/Nova (or any tool) succeed via the installer's seams
 - [License drivers](docs/tools/license.md) — enable, swap driver, capabilities
 
 ## Local development

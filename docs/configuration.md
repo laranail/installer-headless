@@ -103,6 +103,22 @@ creation hooks compose without a separate multi-user engine.
 Database connection is configured at runtime from the environment step; you do
 not pre-configure credentials in this file.
 
+## Access lockdown — `installer.security.*`
+
+Restrict who/when/how fast the web installer is reached (IP allowlist, host allowlist,
+HTTPS, token/password gate, availability window, throttling, response headers,
+auto-disable). All off by default. Full reference: [tools/security.md](tools/security.md).
+
+## Notifications — `installer.notifications.*`
+
+`enabled`, `channels` (default `mail`), `mail.to`, per-channel `routes`, and a separate
+`security` alert stream. See [tools/events.md](tools/events.md).
+
+## Hosting environment — `installer.environment.*`
+
+`mode` (auto|shared|vps), `session_store`/`cache_store` (forced for installer requests),
+and `time_limit`. See [tools/shared-hosting.md](tools/shared-hosting.md).
+
 ## See also
 
 - [tools/steps.md](tools/steps.md) — the step pipeline.
