@@ -32,6 +32,64 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Access lockdown
+    |--------------------------------------------------------------------------
+    |
+    | Restrict who/when/how the web installer can be reached. Every control is
+    | OFF by default (empty/false) so a default install behaves as before, and the
+    | layer fails closed. `enabled` is the master switch; `bypass_local` skips the
+    | access checks under the `local` environment so development stays frictionless.
+    | The policy lives in the headless package (InstallerAccessPolicy) and is
+    | enforced by the web middleware. See docs/tools/security.md.
+    |
+    */
+
+    'security' => [
+        'enabled' => env('INSTALLER_SECURITY', true),
+        'bypass_local' => env('INSTALLER_SECURITY_BYPASS_LOCAL', true),
+
+        // Require HTTPS. Behind a host proxy, set the app's TrustProxies (or, as a
+        // last resort, trust_forwarded_proto) so the scheme is detected correctly.
+        'require_https' => env('INSTALLER_REQUIRE_HTTPS', false),
+        'trust_forwarded_proto' => env('INSTALLER_TRUST_FORWARDED_PROTO', false),
+
+        // Allowlists — comma-separated. IPs accept CIDR (IPv4/IPv6); hosts accept
+        // wildcards. Empty = allow all. Loopback is auto-allowed outside production.
+        'allowed_ips' => array_filter(explode(',', (string) env('INSTALLER_ALLOWED_IPS', ''))),
+        'allowed_hosts' => array_filter(explode(',', (string) env('INSTALLER_ALLOWED_HOSTS', ''))),
+
+        // Secret gate. Prefer `token_hash` (a bcrypt/argon hash) over the raw token.
+        // Empty (both) = no gate. `single_use_token` invalidates it after install.
+        'token' => env('INSTALLER_TOKEN'),
+        'token_hash' => env('INSTALLER_TOKEN_HASH'),
+        'token_header' => 'X-Installer-Token',
+        'single_use_token' => env('INSTALLER_TOKEN_SINGLE_USE', false),
+
+        // Accept a temporarySignedRoute signature as access (shareable expiring link).
+        'signed_links' => env('INSTALLER_SIGNED_LINKS', false),
+
+        // Availability window — 'Y-m-d H:i' (or null) in the given timezone
+        // (null = config('app.timezone')). Open-ended on either side is allowed.
+        'available_from' => env('INSTALLER_AVAILABLE_FROM'),
+        'available_until' => env('INSTALLER_AVAILABLE_UNTIL'),
+        'timezone' => env('INSTALLER_TIMEZONE'),
+        'window_applies_to_cli' => env('INSTALLER_WINDOW_CLI', false),
+
+        // Don't even register the web routes (404) once installed; emit security
+        // response headers (no-store/DENY/nosniff/no-referrer/noindex).
+        'disable_after_install' => env('INSTALLER_DISABLE_AFTER_INSTALL', true),
+        'headers' => env('INSTALLER_SECURITY_HEADERS', true),
+
+        'throttle' => [
+            'max_attempts' => (int) env('INSTALLER_THROTTLE_MAX', 60),
+            'decay_minutes' => (int) env('INSTALLER_THROTTLE_DECAY', 1),
+            'gate_max_attempts' => (int) env('INSTALLER_GATE_THROTTLE_MAX', 5),
+            'gate_lockout_minutes' => (int) env('INSTALLER_GATE_LOCKOUT', 15),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Environment file paths
     |--------------------------------------------------------------------------
     |

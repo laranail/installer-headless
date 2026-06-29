@@ -7,12 +7,14 @@ namespace Simtabi\Laranail\Installer\Headless\Providers;
 use Illuminate\Contracts\Events\Dispatcher;
 use Override;
 use Simtabi\Laranail\Installer\Headless\Console\Commands\EnvUpdateCommand;
+use Simtabi\Laranail\Installer\Headless\Console\Commands\GenerateTokenCommand;
 use Simtabi\Laranail\Installer\Headless\Console\Commands\InstallCommand;
 use Simtabi\Laranail\Installer\Headless\Console\Commands\ResetCommand;
 use Simtabi\Laranail\Installer\Headless\Console\Commands\StatusCommand;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\InstallerManager;
+use Simtabi\Laranail\Installer\Headless\Security\InstallerAccessPolicy;
 use Simtabi\Laranail\Installer\Headless\Steps\ChoiceStep;
 use Simtabi\Laranail\Installer\Headless\Steps\CreateUserStep;
 use Simtabi\Laranail\Installer\Headless\Steps\EnvironmentStep;
@@ -73,6 +75,7 @@ final class InstallerServiceProvider extends PackageServiceProvider
                 StatusCommand::class,
                 ResetCommand::class,
                 EnvUpdateCommand::class,
+                GenerateTokenCommand::class,
             );
     }
 
@@ -88,6 +91,7 @@ final class InstallerServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(InstallationState::class);
+        $this->app->singleton(InstallerAccessPolicy::class);
         $this->app->singleton(UserCreationHooks::class);
         $this->app->singleton(UserFormHooks::class);
         $this->app->singleton(RoleManager::class);
