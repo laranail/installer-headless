@@ -85,11 +85,16 @@ final class RequirementsChecker
      */
     public function warnings(): array
     {
-        $disabled = array_filter(array_map('trim', explode(',', (string) ini_get('disable_functions'))));
+        $disableFunctions = ini_get('disable_functions');
+        $disabled = array_filter(array_map(trim(...), explode(',', $disableFunctions === false ? '' : $disableFunctions)));
         $blocked = array_values(array_intersect(['proc_open', 'exec', 'symlink'], $disabled));
 
         $time = (int) ini_get('max_execution_time');
-        $memory = $this->bytes((string) ini_get('memory_limit'));
+
+        $memoryLimit = ini_get('memory_limit');
+        $memoryLimit = $memoryLimit === false ? '-1' : $memoryLimit;
+        $memory = $this->bytes($memoryLimit);
+
         $session = (string) config('session.driver');
         $cache = (string) config('cache.default');
 
@@ -104,7 +109,7 @@ final class RequirementsChecker
             ],
             'memory_limit' => [
                 'ok' => $memory < 0 || $memory >= 128 * 1024 * 1024,
-                'detail' => (string) ini_get('memory_limit'),
+                'detail' => $memoryLimit,
             ],
             'session_driver' => [
                 'ok' => ! $this->dbBacked($session),
