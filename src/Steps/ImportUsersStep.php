@@ -44,59 +44,64 @@ class ImportUsersStep extends AbstractStep
 
     public function run(InstallerContext $context): void
     {
-        $rows = $this->rows($context);
+        $this->raiseTimeLimit();
 
-        if ($rows === []) {
-            return;
+        // Stream rows and create one at a time (idempotent by email) — bounded memory
+        // for large CSVs, and a timed-out/retried run safely skips existing users.
+        $count = 0;
+
+        foreach ($this->rows($context) as $row) {
+            $this->creator->create(UserData::fromArray($row));
+            $count++;
         }
 
-        $created = $this->creator->createMany(array_map(
-            UserData::fromArray(...),
-            $rows,
-        ));
-
-        $context->set('imported_users', count($created));
+        if ($count > 0) {
+            $context->set('imported_users', $count);
+        }
     }
 
     /**
-     * @return list<array<string, mixed>>
+     * @return iterable<array<string, mixed>>
      */
-    private function rows(InstallerContext $context): array
+    private function rows(InstallerContext $context): iterable
     {
         /** @var list<array<string, mixed>> $configured */
         $configured = (array) config('installer.users.import.rows', []);
 
         if ($configured !== []) {
-            return array_values($configured);
+            yield from array_values($configured);
+
+            return;
         }
 
         $path = (string) ($context->input('path') ?? config('installer.users.import.path', ''));
 
-        return $path !== '' && is_file($path) ? $this->parseCsv($path) : [];
+        if ($path !== '' && is_file($path)) {
+            yield from $this->parseCsv($path);
+        }
     }
 
     /**
-     * Parse a CSV whose first row is the header into row maps.
+     * Lazily parse a CSV whose first row is the header into row maps.
      *
-     * @return list<array<string, mixed>>
+     * @return iterable<array<string, mixed>>
      */
-    private function parseCsv(string $path): array
+    private function parseCsv(string $path): iterable
     {
         $handle = fopen($path, 'rb');
 
         if ($handle === false) {
-            return [];
+            return;
         }
 
         try {
             $header = fgetcsv($handle, escape: '\\');
 
             if (! is_array($header)) {
-                return [];
+                return;
             }
 
             $header = array_map(static fn (mixed $h): string => is_string($h) ? trim($h) : (string) $h, $header);
-            $rows = [];
 
             while (($data = fgetcsv($handle, escape: '\\')) !== false) {
                 if ($data === [null]) {
@@ -104,10 +109,9 @@ class ImportUsersStep extends AbstractStep
                 }
 
                 $values = array_pad(array_slice($data, 0, count($header)), count($header), null);
-                $rows[] = array_combine($header, $values);
-            }
 
-            return $rows;
+                yield array_combine($header, $values);
+            }
         } finally {
             fclose($handle);
         }

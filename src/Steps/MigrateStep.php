@@ -20,6 +20,8 @@ class MigrateStep extends AbstractStep
 
     public function run(InstallerContext $context): void
     {
+        $this->raiseTimeLimit();
+
         $seeder = config('installer.database.seeder');
 
         $this->runner->run(is_string($seeder) && $seeder !== '' ? $seeder : null);

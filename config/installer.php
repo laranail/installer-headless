@@ -90,6 +90,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Hosting environment
+    |--------------------------------------------------------------------------
+    |
+    | Tunes the installer for the host. `mode` (auto|shared|vps) drives preflight
+    | guidance; `auto` detects restricted shared hosting (disabled proc_open, db/redis
+    | session+cache). `session_store`/`cache_store` are forced for installer HTTP
+    | requests so the wizard works before migrations create db-backed session/cache
+    | tables (set null to leave the app's drivers untouched). `time_limit` is a
+    | best-effort cap raised for long steps (0 = unlimited, null = leave as-is).
+    |
+    */
+
+    'environment' => [
+        'mode' => env('INSTALLER_ENV_MODE', 'auto'),
+        'session_store' => env('INSTALLER_SESSION_STORE', 'file'),
+        'cache_store' => env('INSTALLER_CACHE_STORE', 'file'),
+        'time_limit' => env('INSTALLER_TIME_LIMIT', 0),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Environment file paths
     |--------------------------------------------------------------------------
     |

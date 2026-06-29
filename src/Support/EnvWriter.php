@@ -102,10 +102,22 @@ final class EnvWriter
         @fclose($handle);
         @chmod($temp, 0600);
 
-        if (! @rename($temp, $path)) {
-            @unlink($temp);
-
-            throw EnvironmentException::unwritable($path);
+        if (@rename($temp, $path)) {
+            return;
         }
+
+        // Fallback for restricted hosts where renaming over an existing .env is
+        // blocked (e.g. the file is owned by another user): copy in place, then
+        // drop the temp file. Non-atomic, but it keeps the installer working.
+        if (@copy($temp, $path)) {
+            @unlink($temp);
+            @chmod($path, 0600);
+
+            return;
+        }
+
+        @unlink($temp);
+
+        throw EnvironmentException::unwritable($path);
     }
 }
