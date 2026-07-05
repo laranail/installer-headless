@@ -1,5 +1,6 @@
 # laranail/installer-headless
 
+[![Latest version on Packagist](https://img.shields.io/packagist/v/laranail/installer-headless.svg)](https://packagist.org/packages/laranail/installer-headless)
 [![Tests](https://github.com/laranail/installer-headless/actions/workflows/tests.yml/badge.svg)](https://github.com/laranail/installer-headless/actions/workflows/tests.yml)
 [![Static analysis](https://github.com/laranail/installer-headless/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/laranail/installer-headless/actions/workflows/static-analysis.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -91,25 +92,39 @@ to [`laranail/license-verifier`](https://opensource.simtabi.com/license-verifier
 — pick any driver (Envato, Keygen, Lemon Squeezy, …) via that package's config.
 See [docs/tools/license.md](docs/tools/license.md).
 
-## Documentation
+## <a name="documentation"></a>Documentation
 
-Hosted at `opensource.simtabi.com/installer-headless/docs/`; the same pages live
-under `docs/`:
+Hosted at [`opensource.simtabi.com/installer-headless/docs/`](https://opensource.simtabi.com/installer-headless/docs/).
+The same pages live under [`docs/`](docs/):
 
-- [Installation](docs/installation.md) — requirements, install, publishing
-- [Configuration](docs/configuration.md) — every `installer.*` config key
-- [Architecture](docs/architecture.md) — engine, steps, state, the two-package boundary
-- [Wizard engine](docs/tools/wizard.md) — one definition (fields + rules) drives CLI + web; single validation path
-- [Release](docs/release.md) — tag-driven releases
-- [CLI & TUI](docs/tools/cli.md) — every `laranail::installer.*` command
-- [Environment files](docs/tools/env.md) — `EnvFile`/`EnvWriter` (generate + update)
-- [Extending steps](docs/tools/steps.md) — add/insert/reorder/replace; `ChoiceStep`; per-product pipelines
-- [Runtime DSL](docs/tools/extending.md) — the `Installer` facade: reshape steps/fields/hooks/pipelines from your provider
-- [Access lockdown](docs/tools/security.md) — IP allowlist, token/password gate, time window, throttling, headers, auto-disable
-- [Events & notifications](docs/tools/events.md) — lifecycle events, the notification layer, `Installer::fake()`
-- [Shared hosting](docs/tools/shared-hosting.md) — cPanel/no-SSH: file stores, permissions, web-driven setup
-- [Admin panels](docs/tools/panels.md) — make Filament/Nova (or any tool) succeed via the installer's seams
-- [License drivers](docs/tools/license.md) — enable, swap driver, capabilities
+### Guides
+
+- [Installation](docs/installation.md) — requirements, install, publishing.
+- [Getting started](docs/getting-started.md) — run your first install via the CLI.
+- [Configuration](docs/configuration.md) — every `installer.*` config key.
+- [Architecture](docs/architecture.md) — engine, steps, state, the two-package boundary.
+- [Release](docs/release.md) — tag-driven releases.
+
+### Reference
+
+- [Wizard engine](docs/tools/wizard.md) — one definition (fields + rules) drives CLI + web; single validation path.
+- [CLI & TUI](docs/tools/cli.md) — every `laranail::installer.*` command.
+- [Environment files](docs/tools/env.md) — `EnvFile`/`EnvWriter` (generate + update).
+- [Extending steps](docs/tools/steps.md) — add/insert/reorder/replace; `ChoiceStep`; per-product pipelines.
+- [Runtime DSL](docs/tools/extending.md) — the `Installer` facade: reshape steps/fields/hooks/pipelines.
+- [Access lockdown](docs/tools/security.md) — IP allowlist, token/password gate, time window, throttling, headers, auto-disable.
+- [Events & notifications](docs/tools/events.md) — lifecycle events, the notification layer, `Installer::fake()`.
+- [Shared hosting](docs/tools/shared-hosting.md) — cPanel/no-SSH: file stores, permissions, web-driven setup.
+- [Admin panels](docs/tools/panels.md) — make Filament/Nova (or any tool) succeed via the installer's seams.
+- [License drivers](docs/tools/license.md) — enable, swap driver, capabilities.
+
+### Project
+
+- [Changelog](CHANGELOG.md) — release history.
+
+## Stability
+
+Pre-1.0 (0.x) — the public API may change between minor versions. Pin a version before bumping.
 
 ## Local development
 
@@ -125,6 +140,10 @@ composer format    # apply Pint
 - [`laranail/installer-web`](https://github.com/laranail/installer-web) — the web wizard UI
 - [`laranail/license-verifier`](https://github.com/laranail/license-verifier) — license verification
 - [`laranail/database-tools`](https://github.com/laranail/database-tools) — optional SQL-dump import
+
+## Community
+
+- [Issues](https://github.com/laranail/installer-headless/issues) — bugs + feature requests.
 
 ## Contributing & security
 
