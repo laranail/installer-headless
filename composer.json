@@ -11,7 +11,7 @@
         "cli",
         "laranail"
     ],
-    "homepage": "https://opensource.simtabi.com/installer-headless/",
+    "homepage": "https://opensource.simtabi.com/documentation/laranail/installer-headless/",
     "license": "MIT",
     "authors": [
         {
@@ -29,7 +29,7 @@
     "support": {
         "issues": "https://github.com/laranail/installer-headless/issues",
         "source": "https://github.com/laranail/installer-headless",
-        "docs": "https://opensource.simtabi.com/installer-headless/docs/"
+        "docs": "https://opensource.simtabi.com/documentation/laranail/installer-headless/"
     },
     "require": {
         "php": "^8.4.1 || ^8.5",
