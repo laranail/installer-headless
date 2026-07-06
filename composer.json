@@ -43,7 +43,7 @@
         "illuminate/validation": "^13.0",
         "laranail/console": "^1.1",
         "laranail/license-verifier": "^0.1",
-        "laranail/package-tools": "^1.3",
+        "laranail/package-tools": "^2.0",
         "laravel/prompts": "^0.3.18 || ^1.0"
     },
     "require-dev": {
@@ -67,10 +67,22 @@
         "laranail/database-tools": "Enables the optional SQL-dump import step (ImportDatabaseStep)."
     },
     "repositories": {
-        "package-tools": { "type": "path", "url": "../../package/tools" },
-        "console": { "type": "path", "url": "../../tools/console" },
-        "license-verifier": { "type": "path", "url": "../../licensing/verifier" },
-        "database-tools": { "type": "path", "url": "../../database-tools" }
+        "package-tools": {
+            "type": "path",
+            "url": "../../package/tools"
+        },
+        "console": {
+            "type": "path",
+            "url": "../../tools/console"
+        },
+        "license-verifier": {
+            "type": "path",
+            "url": "../../licensing/verifier"
+        },
+        "database-tools": {
+            "type": "path",
+            "url": "../../database-tools"
+        }
     },
     "autoload": {
         "psr-4": {
@@ -88,7 +100,11 @@
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest --colors=always",
         "test-coverage": "vendor/bin/pest --coverage",
-        "lint": ["@pint", "@analyse", "@rector"],
+        "lint": [
+            "@pint",
+            "@analyse",
+            "@rector"
+        ],
         "pint": "vendor/bin/pint --test",
         "format": "vendor/bin/pint",
         "rector": "vendor/bin/rector process --dry-run",
