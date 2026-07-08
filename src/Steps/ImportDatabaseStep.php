@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Override;
-use Simtabi\Laranail\DatabaseTools\Backup\SqlFileRestorer;
+use Simtabi\Laranail\DbTools\Backup\SqlFileRestorer;
 use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
- * Imports a SQL dump via `laranail/database-tools` (`SqlFileRestorer`).
+ * Imports a SQL dump via `laranail/db-tools` (`SqlFileRestorer`).
  *
  * Off by default; enable via `installer.steps.import-database.enabled` or
  * `Installer::step(new ImportDatabaseStep)`. Source: the `path` field / config
  * `installer.database.import.path`, on `installer.database.import.connection`.
- * `database-tools` is an optional (`suggest`) dependency — resolved lazily so the
+ * `db-tools` is an optional (`suggest`) dependency — resolved lazily so the
  * step never breaks boot when it's absent.
  */
 class ImportDatabaseStep extends AbstractStep
@@ -44,7 +44,7 @@ class ImportDatabaseStep extends AbstractStep
         }
 
         if (! class_exists(SqlFileRestorer::class)) {
-            throw new InstallerException('Database import requires laranail/database-tools — install it with `composer require laranail/database-tools`.');
+            throw new InstallerException('Database import requires laranail/db-tools — install it with `composer require laranail/db-tools`.');
         }
 
         $connection = config('installer.database.import.connection');

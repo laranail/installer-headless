@@ -61,10 +61,10 @@
         "rector/rector": "^2.0",
         "roave/security-advisories": "dev-latest",
         "spatie/laravel-permission": "^6.0 || ^7.0",
-        "laranail/database-tools": "^1.0"
+        "laranail/db-tools": "^2.0"
     },
     "suggest": {
-        "laranail/database-tools": "Enables the optional SQL-dump import step (ImportDatabaseStep)."
+        "laranail/db-tools": "Enables the optional SQL-dump import step (ImportDatabaseStep)."
     },
     "repositories": {
         "package-tools": {
@@ -79,9 +79,9 @@
             "type": "path",
             "url": "../../licensing/verifier"
         },
-        "database-tools": {
+        "db-tools": {
             "type": "path",
-            "url": "../../database-tools"
+            "url": "../../db-tools"
         }
     },
     "autoload": {

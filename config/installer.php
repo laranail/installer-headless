@@ -184,7 +184,7 @@ return [
     |
     | `seeder` is an optional seeder class run after migrations (null = none).
     | `import` controls the optional SQL-dump import (delegated to
-    | laranail/database-tools when present); disabled by default.
+    | laranail/db-tools when present); disabled by default.
     |
     */
 

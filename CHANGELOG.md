@@ -68,8 +68,8 @@ initial release.
   `installer.user.role_field`; `UserAccountCreator::createMany()` for bulk creation.
 - **`ImportUsersStep`** (`import-users`) — bulk user import from a CSV or array, idempotent
   by email; **`ImportDatabaseStep`** (`import-database`) — SQL-dump import via the optional
-  `laranail/database-tools`. Both registered **disabled by default** (config- or
-  DSL-toggleable) and declare a `path` field. `database-tools` added to `suggest`.
+  `laranail/db-tools`. Both registered **disabled by default** (config- or
+  DSL-toggleable) and declare a `path` field. `db-tools` added to `suggest`.
 
 ### Core engine (initial build)
 

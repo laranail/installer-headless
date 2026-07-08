@@ -15,7 +15,7 @@ All keys live under the flat `installer.*` namespace (`config/installer.php`).
 | `requirements.apache` | `['mod_rewrite']` | Apache modules (best-effort). |
 | `requirements.permissions` | paths | Paths that must be writable. |
 | `database.seeder` | `null` | Optional seeder class run after migrate. |
-| `database.import.enabled` | `false` | Optional SQL-dump import (via `database-tools`). |
+| `database.import.enabled` | `false` | Optional SQL-dump import (via `db-tools`). |
 | `database.import.path` | `null` | SQL dump path for the `import-database` step. |
 | `database.import.connection` | `null` | Connection the dump restores onto (null = default). |
 | `users.import.path` | `null` | CSV path for the `import-users` step (header row → columns). |

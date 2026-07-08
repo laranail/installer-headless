@@ -44,7 +44,7 @@ A working single-select step — the no-code way to re-add theme/preset choice:
         'priority' => 35,
         'options' => [
             'classic' => ['label' => 'Classic', 'callback' => function (string $value, $context): void {
-                // e.g. import a per-theme SQL dump via laranail/database-tools
+                // e.g. import a per-theme SQL dump via laranail/db-tools
             }],
             'modern' => ['label' => 'Modern'],
         ],
@@ -184,9 +184,9 @@ Two optional steps ship **registered but disabled** — enable via config
   row → columns) or an inline array (`installer.users.import.rows`) via `createMany()`,
   idempotent by email. **Security:** a CSV with plaintext passwords is sensitive — add it
   to `installer.cleanup.files` so the final step removes it; import logs stay secret-masked.
-- **`import-database`** — restores a SQL dump via the optional `laranail/database-tools`
+- **`import-database`** — restores a SQL dump via the optional `laranail/db-tools`
   (`SqlFileRestorer`), driven by `installer.database.import.{path,connection}`. Install
-  `laranail/database-tools` to use it; otherwise the step errors clearly when run.
+  `laranail/db-tools` to use it; otherwise the step errors clearly when run.
 
 Both declare a `path` field, so they render in the web wizard and accept a `--field=path=…`
 override on the CLI.
