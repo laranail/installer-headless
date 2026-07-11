@@ -131,7 +131,7 @@ final class EnvFile implements Stringable
     {
         $this->lines = array_values(array_filter(
             $this->lines,
-            static fn (array $line): bool => ! (($line['type'] ?? '') === 'entry' && $line['key'] === $key),
+            static fn (array $line): bool => ($line['type'] ?? '') !== 'entry' || $line['key'] !== $key,
         ));
 
         return $this;

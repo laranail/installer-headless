@@ -24,7 +24,7 @@ jobs:
       # `no-api: true` git-clones instead of using the GitHub REST API (avoids 429).
       - name: Resolve laranail packages from VCS
         run: |
-          for pkg in package-tools console license-verifier database-tools; do
+          for pkg in package-tools console license-verifier db-tools; do
             composer config "repositories.$pkg" "{\"type\":\"vcs\",\"url\":\"https://github.com/laranail/$pkg\",\"no-api\":true}"
           done
       - name: Install dependencies

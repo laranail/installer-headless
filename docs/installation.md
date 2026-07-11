@@ -29,7 +29,7 @@ php artisan vendor:publish --tag=laranail/installer-headless::translations
 ## Optional integrations
 
 - **Web wizard**: `composer require laranail/installer-web`.
-- **SQL-dump import**: `composer require laranail/database-tools`.
+- **SQL-dump import**: `composer require laranail/db-tools`.
 - **Role assignment**: `composer require spatie/laravel-permission` (auto-detected).
 
 ## Dependency resolution (local dev vs CI)

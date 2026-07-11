@@ -66,7 +66,7 @@ it('imports users from an inline rows array', function (): void {
     expect(User::query()->where('email', 'cy@x.test')->exists())->toBeTrue();
 });
 
-it('imports a SQL dump via database-tools', function (): void {
+it('imports a SQL dump via db-tools', function (): void {
     $sql = sys_get_temp_dir() . '/dump-' . uniqid() . '.sql';
     file_put_contents($sql, "CREATE TABLE widgets (id integer primary key autoincrement, name varchar(50));\nINSERT INTO widgets (name) VALUES ('gear');\n");
     config()->set('installer.database.import.path', $sql);
