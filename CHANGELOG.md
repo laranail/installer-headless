@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-11
+
+### Changed
+
+- Adopt `laranail/package-tools ^7.0` and `laranail/license-verifier ^0.2`
+  (the failure-handling standard releases). The 15-site catch audit found the
+  codebase already compliant — `InstallerEngine` dispatches `StepFailed` /
+  `InstallerFailed` then rethrows, `MigrationRunner` / `EnvWriter` wrap-and-rethrow,
+  and the connection / install-state / first-user guards fail closed by contract.
+- Remove the committed local path repositories (`../../package/tools`,
+  `../../tools/console`, `../../licensing/verifier`, `../../db-tools`) so the
+  package resolves from Packagist like the rest of the laranail family, and
+  tighten `minimum-stability` back to `stable`.
+
+### Added
+
+- **Boot-health CI gate** — asserts the package boots with no degraded
+  package-tools builders (failure-handling standard, rule 12).
+
 ## [0.2.0] - 2026-06-29
 
 ### Added
