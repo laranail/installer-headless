@@ -1,0 +1,37 @@
+name: Static analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  static:
+    name: Pint · PHPStan · Rector
+    runs-on: ubuntu-latest
+    env:
+      # Authenticate composer's GitHub API access so VCS resolution of sibling
+      # laranail packages isn't rate-limited (HTTP 429) on unauthenticated runners.
+      COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: dom, curl, libxml, mbstring, zip, fileinfo, sodium
+          coverage: none
+      # Override every committed `path` repo with its public GitHub source.
+      # `no-api: true` git-clones instead of using the GitHub REST API (avoids 429).
+      - name: Resolve laranail packages from VCS
+        run: |
+          for pkg in package-tools console license-verifier db-tools; do
+            composer config "repositories.$pkg" "{\"type\":\"vcs\",\"url\":\"https://github.com/laranail/$pkg\",\"no-api\":true}"
+          done
+      - name: Install dependencies
+        run: composer update --prefer-stable --no-interaction --no-progress
+      - name: Pint
+        run: vendor/bin/pint --test
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --error-format=github
+      - name: Rector
+        run: vendor/bin/rector process --dry-run --no-progress-bar

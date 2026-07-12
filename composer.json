@@ -1,0 +1,133 @@
+{
+    "name": "laranail/installer-headless",
+    "description": "Headless, framework-friendly Laravel application installer engine \u2014 requirements checks, .env generate/update, DB connection test, migration/seeder runner, admin creation, pluggable step pipeline, install lock, and CLI/TUI. Web UI ships separately in laranail/installer-web.",
+    "keywords": [
+        "laravel",
+        "installer",
+        "setup",
+        "wizard",
+        "headless",
+        "env",
+        "cli",
+        "laranail"
+    ],
+    "homepage": "https://opensource.simtabi.com/products/laranail/installer-headless",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simtabi LLC",
+            "email": "opensource@simtabi.com",
+            "homepage": "https://opensource.simtabi.com",
+            "role": "Organization"
+        },
+        {
+            "name": "Imani Manyara",
+            "email": "imani@simtabi.com",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/laranail/installer-headless/issues",
+        "source": "https://github.com/laranail/installer-headless",
+        "docs": "https://opensource.simtabi.com/documentation/laranail/installer-headless/"
+    },
+    "require": {
+        "php": "^8.4.1 || ^8.5",
+        "ext-json": "*",
+        "illuminate/console": "^13.0",
+        "illuminate/contracts": "^13.0",
+        "illuminate/database": "^13.0",
+        "illuminate/filesystem": "^13.0",
+        "illuminate/http": "^13.0",
+        "illuminate/support": "^13.0",
+        "illuminate/validation": "^13.0",
+        "laranail/console": "^0.1",
+        "laranail/license-verifier": "^0.1",
+        "laranail/package-tools": "^0.1",
+        "laravel/prompts": "^0.3.18 || ^1.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.18",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.8",
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-arch": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "rector/rector": "^2.0",
+        "roave/security-advisories": "dev-latest",
+        "spatie/laravel-permission": "^6.0 || ^7.0",
+        "laranail/db-tools": "^0.1"
+    },
+    "suggest": {
+        "laranail/db-tools": "Enables the optional SQL-dump import step (ImportDatabaseStep)."
+    },
+    "autoload": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Installer\\Headless\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Simtabi\\Laranail\\Installer\\Headless\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest --colors=always",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "lint": [
+            "@pint",
+            "@analyse",
+            "@rector"
+        ],
+        "pint": "vendor/bin/pint --test",
+        "format": "vendor/bin/pint",
+        "rector": "vendor/bin/rector process --dry-run",
+        "rector-fix": "vendor/bin/rector process",
+        "audit": "@composer audit"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Simtabi\\Laranail\\Installer\\Headless\\Providers\\InstallerServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/console"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/license-verifier"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/package-tools"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laranail/db-tools"
+        }
+    ]
+}
