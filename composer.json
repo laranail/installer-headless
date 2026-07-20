@@ -60,7 +60,7 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "rector/rector": "^2.0",
         "roave/security-advisories": "dev-latest",
-        "spatie/laravel-permission": "^6.0 || ^7.0",
+        "spatie/laravel-permission": "^8.3.0",
         "laranail/db-tools": "^0.1"
     },
     "suggest": {
