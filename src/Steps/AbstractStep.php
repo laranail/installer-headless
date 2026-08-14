@@ -33,7 +33,7 @@ abstract class AbstractStep implements Step
 
     public function label(): string
     {
-        $line = "installer::installer.steps.{$this->key}";
+        $line = "laranail-installer-headless::installer.steps.{$this->key}";
         $translated = trans($line);
 
         return $translated === $line ? ucfirst(str_replace(['-', '_'], ' ', $this->key)) : (string) $translated;

@@ -72,7 +72,7 @@ final class InstallerServiceProvider extends PackageServiceProvider
             ->name('laranail/installer-headless')
             ->hasConfigFile('installer')
             ->withoutConfigNamespacing()
-            ->hasTranslations('installer')
+            ->hasTranslations('laranail-installer-headless')
             ->hasCommands(
                 InstallCommand::class,
                 StatusCommand::class,

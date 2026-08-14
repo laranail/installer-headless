@@ -16,5 +16,5 @@ it('merges the flat installer config', function (): void {
 });
 
 it('registers the installer translation namespace', function (): void {
-    expect(trans()->hasForLocale('installer::installer', 'en'))->toBeBool();
+    expect(trans()->hasForLocale('laranail-installer-headless::installer', 'en'))->toBeBool();
 });
