@@ -61,7 +61,7 @@
         "rector/rector": "^2.0",
         "roave/security-advisories": "dev-latest",
         "spatie/laravel-permission": "^8.3.0",
-        "laranail/db-tools": "^0.9"
+        "laranail/db-tools": "^0.1"
     },
     "suggest": {
         "laranail/db-tools": "Enables the optional SQL-dump import step (ImportDatabaseStep)."
