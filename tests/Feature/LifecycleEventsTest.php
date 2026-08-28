@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Event;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
+use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\Events\StepFailed;
 use Simtabi\Laranail\Installer\Headless\Events\UserCreated;
-use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
-use Simtabi\Laranail\Installer\Headless\InstallerEngine;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 
 beforeEach(function (): void {
     $this->dir = sys_get_temp_dir() . '/installer-events-' . uniqid();
@@ -33,14 +33,14 @@ beforeEach(function (): void {
     (new InstallationState)->clear();
 
     $this->context = fn (): InstallerContext => InstallerContext::fromInput([
-        'locale' => 'en',
-        'app_name' => 'Test App',
-        'app_url' => 'http://test.local',
-        'database_driver' => 'sqlite',
-        'database_name' => $this->dir . '/db.sqlite',
-        'name' => 'Ada Lovelace',
-        'email' => 'ada@example.com',
-        'password' => 'secret-pass',
+        'locale'                => 'en',
+        'app_name'              => 'Test App',
+        'app_url'               => 'http://test.local',
+        'database_driver'       => 'sqlite',
+        'database_name'         => $this->dir . '/db.sqlite',
+        'name'                  => 'Ada Lovelace',
+        'email'                 => 'ada@example.com',
+        'password'              => 'secret-pass',
         'password_confirmation' => 'secret-pass',
     ]);
 });

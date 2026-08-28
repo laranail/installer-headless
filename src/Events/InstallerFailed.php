@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Events;
 
-use Illuminate\Foundation\Events\Dispatchable;
 use Throwable;
+use Illuminate\Foundation\Events\Dispatchable;
 
 /**
  * Fired once when a step throws and halts the install — the top-level "install

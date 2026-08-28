@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless;
 
+use Throwable;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Validation\ValidationException;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
-use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
 use Simtabi\Laranail\Installer\Headless\Events\StepFailed;
 use Simtabi\Laranail\Installer\Headless\Events\StepStarted;
-use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
+use Simtabi\Laranail\Installer\Headless\Support\StepPipelines;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
+use Simtabi\Laranail\Installer\Headless\Wizard\WizardValidator;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
 use Simtabi\Laranail\Installer\Headless\Support\ProductPipeline;
 use Simtabi\Laranail\Installer\Headless\Support\ProductRegistry;
-use Simtabi\Laranail\Installer\Headless\Support\StepPipelines;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
-use Simtabi\Laranail\Installer\Headless\Wizard\WizardValidator;
-use Throwable;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 
 /**
  * The single wizard engine that drives the install pipeline. The web layer and the
@@ -80,20 +80,6 @@ class InstallerEngine
             : $this->state;
 
         return new self($registry, $state, $this->validator, $pipeline);
-    }
-
-    /**
-     * The steps active for this engine: for a product-scoped pipeline the selected
-     * set IS the enabled set (so a product may include a globally-disabled step like
-     * `license`); for the default pipeline it's the config-driven enabled set.
-     *
-     * @return list<Step>
-     */
-    private function activeSteps(): array
-    {
-        return $this->pipeline instanceof ProductPipeline && $this->pipeline->steps !== []
-            ? $this->registry->all()
-            : $this->registry->enabled();
     }
 
     // --- Navigation -------------------------------------------------------
@@ -173,9 +159,9 @@ class InstallerEngine
         $completed = array_filter($active, fn (Step $s): bool => $this->state->isStepComplete($s->key()));
 
         return [
-            'total' => count($active),
+            'total'     => count($active),
             'completed' => count($completed),
-            'current' => $this->current()?->key(),
+            'current'   => $this->current()?->key(),
         ];
     }
 
@@ -203,7 +189,8 @@ class InstallerEngine
     }
 
     /**
-     * @param  array<string, mixed>  $input
+     * @param array<string, mixed> $input
+     *
      * @return array<string, mixed>
      */
     public function rules(string $key, array $input = []): array
@@ -216,7 +203,7 @@ class InstallerEngine
     /**
      * Validate + run a single step from collected input, returning the next step key.
      *
-     * @param  array<string, mixed>  $input
+     * @param array<string, mixed> $input
      *
      * @throws ValidationException|InstallerException
      */
@@ -271,6 +258,20 @@ class InstallerEngine
         });
     }
 
+    /**
+     * The steps active for this engine: for a product-scoped pipeline the selected
+     * set IS the enabled set (so a product may include a globally-disabled step like
+     * `license`); for the default pipeline it's the config-driven enabled set.
+     *
+     * @return list<Step>
+     */
+    private function activeSteps(): array
+    {
+        return $this->pipeline instanceof ProductPipeline && $this->pipeline->steps !== []
+            ? $this->registry->all()
+            : $this->registry->enabled();
+    }
+
     private function process(Step $step, InstallerContext $context, bool $validate): void
     {
         // Per-step transform stages run before validation (normalise/enrich/veto).
@@ -311,7 +312,7 @@ class InstallerEngine
      * via the pipeline's configOverlay), restoring the originals afterwards so nothing
      * leaks across products (e.g. between --all-products iterations).
      *
-     * @param  callable(): void  $fn
+     * @param callable(): void $fn
      */
     private function withConfigOverlay(callable $fn): void
     {

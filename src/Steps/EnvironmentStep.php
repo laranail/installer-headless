@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
-use Illuminate\Support\Facades\DB;
 use Override;
+
+use function dirname;
+
+use Illuminate\Support\Facades\DB;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
+use Simtabi\Laranail\Installer\Headless\Support\EnvWriter;
 use Simtabi\Laranail\Installer\Headless\Enums\DatabaseDriver;
 use Simtabi\Laranail\Installer\Headless\Events\EnvironmentSaved;
-use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
-use Simtabi\Laranail\Installer\Headless\Support\DatabaseConnection;
-use Simtabi\Laranail\Installer\Headless\Support\EnvWriter;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\DatabaseConnection;
+use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 use Simtabi\Laranail\Installer\Headless\Support\SensitiveFieldDetector;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * Collects app + database settings, verifies the database connection, writes the
@@ -31,33 +34,6 @@ class EnvironmentStep extends AbstractStep
         private readonly DatabaseConnection $database,
         private readonly SensitiveFieldDetector $sensitive,
     ) {}
-
-    #[Override]
-    protected function stepFields(): array
-    {
-        $drivers = [];
-
-        foreach (DatabaseDriver::cases() as $driver) {
-            $drivers[$driver->value] = $driver->label();
-        }
-
-        $notSqlite = ['field' => 'database_driver', 'not' => ['sqlite']];
-
-        // Seed defaults from the existing .env so this step edits in place (not
-        // just first-write). Secrets are never pre-filled.
-        $env = $this->writer->read((string) (config('installer.env.path') ?: base_path('.env')));
-
-        return [
-            new Field('app_name', 'Application name', 'text', $env->get('APP_NAME') ?? config('app.name', 'Laravel'), ['required', 'string', 'max:120']),
-            new Field('app_url', 'Application URL', 'text', $env->get('APP_URL') ?? config('app.url', 'http://localhost'), ['required', 'string', 'url']),
-            new Field('database_driver', 'Database driver', 'select', $env->get('DB_CONNECTION') ?? 'mysql', ['required', 'string', 'in:' . implode(',', DatabaseDriver::values())], $drivers),
-            new Field('database_host', 'Host', 'text', $env->get('DB_HOST') ?? '127.0.0.1', ['required', 'string'], visibleWhen: $notSqlite),
-            new Field('database_port', 'Port', 'text', $env->get('DB_PORT') ?? '3306', ['required', 'numeric'], visibleWhen: $notSqlite),
-            new Field('database_name', 'Database name', 'text', $env->get('DB_DATABASE') ?? '', ['required', 'string']),
-            new Field('database_username', 'Username', 'text', $env->get('DB_USERNAME') ?? '', ['required', 'string'], visibleWhen: $notSqlite),
-            new Field('database_password', 'Password', 'password', '', ['nullable', 'string'], sensitive: true, visibleWhen: $notSqlite),
-        ];
-    }
 
     public function run(InstallerContext $context): void
     {
@@ -89,6 +65,33 @@ class EnvironmentStep extends AbstractStep
         EnvironmentSaved::dispatch($this->sensitive->mask($values));
     }
 
+    #[Override]
+    protected function stepFields(): array
+    {
+        $drivers = [];
+
+        foreach (DatabaseDriver::cases() as $driver) {
+            $drivers[$driver->value] = $driver->label();
+        }
+
+        $notSqlite = ['field' => 'database_driver', 'not' => ['sqlite']];
+
+        // Seed defaults from the existing .env so this step edits in place (not
+        // just first-write). Secrets are never pre-filled.
+        $env = $this->writer->read((string) (config('installer.env.path') ?: base_path('.env')));
+
+        return [
+            new Field('app_name', 'Application name', 'text', $env->get('APP_NAME') ?? config('app.name', 'Laravel'), ['required', 'string', 'max:120']),
+            new Field('app_url', 'Application URL', 'text', $env->get('APP_URL') ?? config('app.url', 'http://localhost'), ['required', 'string', 'url']),
+            new Field('database_driver', 'Database driver', 'select', $env->get('DB_CONNECTION') ?? 'mysql', ['required', 'string', 'in:' . implode(',', DatabaseDriver::values())], $drivers),
+            new Field('database_host', 'Host', 'text', $env->get('DB_HOST') ?? '127.0.0.1', ['required', 'string'], visibleWhen: $notSqlite),
+            new Field('database_port', 'Port', 'text', $env->get('DB_PORT') ?? '3306', ['required', 'numeric'], visibleWhen: $notSqlite),
+            new Field('database_name', 'Database name', 'text', $env->get('DB_DATABASE') ?? '', ['required', 'string']),
+            new Field('database_username', 'Username', 'text', $env->get('DB_USERNAME') ?? '', ['required', 'string'], visibleWhen: $notSqlite),
+            new Field('database_password', 'Password', 'password', '', ['nullable', 'string'], sensitive: true, visibleWhen: $notSqlite),
+        ];
+    }
+
     /**
      * @return array{driver:string,host?:string,port?:string,database:string,username?:string,password?:string}
      */
@@ -96,15 +99,15 @@ class EnvironmentStep extends AbstractStep
     {
         if ($driver === DatabaseDriver::Sqlite) {
             return [
-                'driver' => 'sqlite',
+                'driver'   => 'sqlite',
                 'database' => (string) $context->input('database_name', database_path('database.sqlite')),
             ];
         }
 
         return [
-            'driver' => $driver->value,
-            'host' => (string) $context->input('database_host', $driver->defaultHost()),
-            'port' => (string) $context->input('database_port', (string) $driver->defaultPort()),
+            'driver'   => $driver->value,
+            'host'     => (string) $context->input('database_host', $driver->defaultHost()),
+            'port'     => (string) $context->input('database_port', (string) $driver->defaultPort()),
             'database' => (string) $context->input('database_name', ''),
             'username' => (string) $context->input('database_username', ''),
             'password' => (string) $context->input('database_password', ''),
@@ -121,7 +124,7 @@ class EnvironmentStep extends AbstractStep
             return;
         }
 
-        $directory = \dirname($database);
+        $directory = dirname($database);
 
         if (! is_dir($directory)) {
             @mkdir($directory, 0755, true);
@@ -131,14 +134,15 @@ class EnvironmentStep extends AbstractStep
     }
 
     /**
-     * @param  array<string, string>  $credentials
+     * @param array<string, string> $credentials
+     *
      * @return array<string, string>
      */
     private function envValues(DatabaseDriver $driver, array $credentials, InstallerContext $context): array
     {
         $values = [
-            'APP_NAME' => (string) $context->input('app_name', 'Laravel'),
-            'APP_URL' => (string) $context->input('app_url', 'http://localhost'),
+            'APP_NAME'      => (string) $context->input('app_name', 'Laravel'),
+            'APP_URL'       => (string) $context->input('app_url', 'http://localhost'),
             'DB_CONNECTION' => $driver->value,
         ];
 
@@ -149,8 +153,8 @@ class EnvironmentStep extends AbstractStep
         }
 
         return array_merge($values, [
-            'DB_HOST' => $credentials['host'] ?? '127.0.0.1',
-            'DB_PORT' => $credentials['port'] ?? '',
+            'DB_HOST'     => $credentials['host'] ?? '127.0.0.1',
+            'DB_PORT'     => $credentials['port'] ?? '',
             'DB_DATABASE' => $credentials['database'],
             'DB_USERNAME' => $credentials['username'] ?? '',
             'DB_PASSWORD' => $credentials['password'] ?? '',
@@ -158,7 +162,7 @@ class EnvironmentStep extends AbstractStep
     }
 
     /**
-     * @param  array<string, string>  $credentials
+     * @param array<string, string> $credentials
      */
     private function applyRuntimeConnection(DatabaseDriver $driver, array $credentials): void
     {
@@ -169,7 +173,7 @@ class EnvironmentStep extends AbstractStep
             : array_merge($credentials, ['charset' => 'utf8mb4', 'prefix' => '']);
 
         config([
-            'database.default' => $name,
+            'database.default'              => $name,
             'database.connections.' . $name => $config,
         ]);
 

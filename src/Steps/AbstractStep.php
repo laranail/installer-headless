@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Illuminate\Support\Traits\Macroable;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
 use Simtabi\Laranail\Installer\Headless\Support\StepFieldHooks;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * Base step that resolves enabled/priority from `installer.steps.<key>` config
@@ -39,20 +39,6 @@ abstract class AbstractStep implements Step
         return $translated === $line ? ucfirst(str_replace(['-', '_'], ' ', $this->key)) : (string) $translated;
     }
 
-    /**
-     * Best-effort raise of the PHP execution-time limit for long-running steps
-     * (migrations, imports) on hosts with a low `max_execution_time`. No-op when
-     * `installer.environment.time_limit` is null or set_time_limit is disabled.
-     */
-    protected function raiseTimeLimit(): void
-    {
-        $limit = config('installer.environment.time_limit');
-
-        if ($limit !== null && function_exists('set_time_limit')) {
-            @set_time_limit((int) $limit);
-        }
-    }
-
     public function priority(): int
     {
         return (int) config("installer.steps.{$this->key}.priority", $this->defaultPriority);
@@ -72,30 +58,10 @@ abstract class AbstractStep implements Step
     }
 
     /**
-     * A step's own fields. Concrete steps override this; the public {@see fields()}
-     * appends consumer-registered extra fields ({@see resolveExtraFields()}).
-     *
-     * @return list<Field>
-     */
-    protected function stepFields(): array
-    {
-        return [];
-    }
-
-    /**
-     * Consumer-registered extra fields for this step (config + runtime hooks).
-     *
-     * @return list<Field>
-     */
-    protected function resolveExtraFields(): array
-    {
-        return app(StepFieldHooks::class)->resolve($this->key());
-    }
-
-    /**
      * Rules for the currently-visible fields. Hidden fields contribute none.
      *
-     * @param  array<string, mixed>  $input
+     * @param array<string, mixed> $input
+     *
      * @return array<string, mixed>
      */
     public function rules(array $input = []): array
@@ -125,5 +91,40 @@ abstract class AbstractStep implements Step
         }
 
         return $defaults;
+    }
+
+    /**
+     * Best-effort raise of the PHP execution-time limit for long-running steps
+     * (migrations, imports) on hosts with a low `max_execution_time`. No-op when
+     * `installer.environment.time_limit` is null or set_time_limit is disabled.
+     */
+    protected function raiseTimeLimit(): void
+    {
+        $limit = config('installer.environment.time_limit');
+
+        if ($limit !== null && function_exists('set_time_limit')) {
+            @set_time_limit((int) $limit);
+        }
+    }
+
+    /**
+     * A step's own fields. Concrete steps override this; the public {@see fields()}
+     * appends consumer-registered extra fields ({@see resolveExtraFields()}).
+     *
+     * @return list<Field>
+     */
+    protected function stepFields(): array
+    {
+        return [];
+    }
+
+    /**
+     * Consumer-registered extra fields for this step (config + runtime hooks).
+     *
+     * @return list<Field>
+     */
+    protected function resolveExtraFields(): array
+    {
+        return app(StepFieldHooks::class)->resolve($this->key());
     }
 }

@@ -6,9 +6,9 @@ namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Override;
 use Simtabi\Laranail\DbTools\Backup\SqlFileRestorer;
-use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Wizard\Field;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 
 /**
  * Imports a SQL dump via `laranail/db-tools` (`SqlFileRestorer`).
@@ -24,14 +24,6 @@ class ImportDatabaseStep extends AbstractStep
     protected string $key = 'import-database';
 
     protected int $defaultPriority = 45;
-
-    #[Override]
-    protected function stepFields(): array
-    {
-        return [
-            new Field('path', 'SQL dump path', 'text', (string) config('installer.database.import.path', ''), ['nullable', 'string']),
-        ];
-    }
 
     public function run(InstallerContext $context): void
     {
@@ -50,5 +42,13 @@ class ImportDatabaseStep extends AbstractStep
         $connection = config('installer.database.import.connection');
 
         app(SqlFileRestorer::class)->restore($path, is_string($connection) ? $connection : null);
+    }
+
+    #[Override]
+    protected function stepFields(): array
+    {
+        return [
+            new Field('path', 'SQL dump path', 'text', (string) config('installer.database.import.path', ''), ['nullable', 'string']),
+        ];
     }
 }

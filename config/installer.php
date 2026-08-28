@@ -45,24 +45,24 @@ return [
     */
 
     'security' => [
-        'enabled' => env('INSTALLER_SECURITY', true),
+        'enabled'      => env('INSTALLER_SECURITY', true),
         'bypass_local' => env('INSTALLER_SECURITY_BYPASS_LOCAL', true),
 
         // Require HTTPS. Behind a host proxy, set the app's TrustProxies (or, as a
         // last resort, trust_forwarded_proto) so the scheme is detected correctly.
-        'require_https' => env('INSTALLER_REQUIRE_HTTPS', false),
+        'require_https'         => env('INSTALLER_REQUIRE_HTTPS', false),
         'trust_forwarded_proto' => env('INSTALLER_TRUST_FORWARDED_PROTO', false),
 
         // Allowlists — comma-separated. IPs accept CIDR (IPv4/IPv6); hosts accept
         // wildcards. Empty = allow all. Loopback is auto-allowed outside production.
-        'allowed_ips' => array_filter(explode(',', (string) env('INSTALLER_ALLOWED_IPS', ''))),
+        'allowed_ips'   => array_filter(explode(',', (string) env('INSTALLER_ALLOWED_IPS', ''))),
         'allowed_hosts' => array_filter(explode(',', (string) env('INSTALLER_ALLOWED_HOSTS', ''))),
 
         // Secret gate. Prefer `token_hash` (a bcrypt/argon hash) over the raw token.
         // Empty (both) = no gate. `single_use_token` invalidates it after install.
-        'token' => env('INSTALLER_TOKEN'),
-        'token_hash' => env('INSTALLER_TOKEN_HASH'),
-        'token_header' => 'X-Installer-Token',
+        'token'            => env('INSTALLER_TOKEN'),
+        'token_hash'       => env('INSTALLER_TOKEN_HASH'),
+        'token_header'     => 'X-Installer-Token',
         'single_use_token' => env('INSTALLER_TOKEN_SINGLE_USE', false),
 
         // Accept a temporarySignedRoute signature as access (shareable expiring link).
@@ -70,20 +70,20 @@ return [
 
         // Availability window — 'Y-m-d H:i' (or null) in the given timezone
         // (null = config('app.timezone')). Open-ended on either side is allowed.
-        'available_from' => env('INSTALLER_AVAILABLE_FROM'),
-        'available_until' => env('INSTALLER_AVAILABLE_UNTIL'),
-        'timezone' => env('INSTALLER_TIMEZONE'),
+        'available_from'        => env('INSTALLER_AVAILABLE_FROM'),
+        'available_until'       => env('INSTALLER_AVAILABLE_UNTIL'),
+        'timezone'              => env('INSTALLER_TIMEZONE'),
         'window_applies_to_cli' => env('INSTALLER_WINDOW_CLI', false),
 
         // Don't even register the web routes (404) once installed; emit security
         // response headers (no-store/DENY/nosniff/no-referrer/noindex).
         'disable_after_install' => env('INSTALLER_DISABLE_AFTER_INSTALL', true),
-        'headers' => env('INSTALLER_SECURITY_HEADERS', true),
+        'headers'               => env('INSTALLER_SECURITY_HEADERS', true),
 
         'throttle' => [
-            'max_attempts' => (int) env('INSTALLER_THROTTLE_MAX', 60),
-            'decay_minutes' => (int) env('INSTALLER_THROTTLE_DECAY', 1),
-            'gate_max_attempts' => (int) env('INSTALLER_GATE_THROTTLE_MAX', 5),
+            'max_attempts'         => (int) env('INSTALLER_THROTTLE_MAX', 60),
+            'decay_minutes'        => (int) env('INSTALLER_THROTTLE_DECAY', 1),
+            'gate_max_attempts'    => (int) env('INSTALLER_GATE_THROTTLE_MAX', 5),
             'gate_lockout_minutes' => (int) env('INSTALLER_GATE_LOCKOUT', 15),
         ],
     ],
@@ -103,10 +103,10 @@ return [
     */
 
     'environment' => [
-        'mode' => env('INSTALLER_ENV_MODE', 'auto'),
+        'mode'          => env('INSTALLER_ENV_MODE', 'auto'),
         'session_store' => env('INSTALLER_SESSION_STORE', 'file'),
-        'cache_store' => env('INSTALLER_CACHE_STORE', 'file'),
-        'time_limit' => env('INSTALLER_TIME_LIMIT', 0),
+        'cache_store'   => env('INSTALLER_CACHE_STORE', 'file'),
+        'time_limit'    => env('INSTALLER_TIME_LIMIT', 0),
     ],
 
     /*
@@ -120,7 +120,7 @@ return [
     */
 
     'env' => [
-        'path' => null,
+        'path'    => null,
         'example' => null,
     ],
 
@@ -151,7 +151,7 @@ return [
     */
 
     'requirements' => [
-        'php' => env('INSTALLER_MIN_PHP', '8.4.1'),
+        'php'        => env('INSTALLER_MIN_PHP', '8.4.1'),
         'extensions' => [
             'openssl',
             'pdo',
@@ -191,8 +191,8 @@ return [
     'database' => [
         'seeder' => env('INSTALLER_SEEDER'),
         'import' => [
-            'enabled' => false,
-            'path' => env('INSTALLER_DB_IMPORT_PATH'),
+            'enabled'    => false,
+            'path'       => env('INSTALLER_DB_IMPORT_PATH'),
             'connection' => env('INSTALLER_DB_IMPORT_CONNECTION'),
         ],
     ],
@@ -237,25 +237,25 @@ return [
 
         // Logical field => your schema's column name (works on any table).
         'fields' => [
-            'name' => 'name',
+            'name'       => 'name',
             'first_name' => 'first_name',
-            'last_name' => 'last_name',
-            'email' => 'email',
-            'password' => 'password',
+            'last_name'  => 'last_name',
+            'email'      => 'email',
+            'password'   => 'password',
         ],
-        'attributes' => [],
+        'attributes'  => [],
         'role_driver' => null,
 
         // The tool is generic — it does NOT assume "admin". Assign nothing by default;
         // set a role to assign one, and/or opt into making the first user an admin.
-        'role' => env('INSTALLER_USER_ROLE'),
-        'type' => env('INSTALLER_USER_TYPE'),
+        'role'                => env('INSTALLER_USER_ROLE'),
+        'type'                => env('INSTALLER_USER_TYPE'),
         'first_user_is_admin' => env('INSTALLER_FIRST_USER_ADMIN', false),
-        'admin_role' => env('INSTALLER_ADMIN_ROLE', 'admin'),
+        'admin_role'          => env('INSTALLER_ADMIN_ROLE', 'admin'),
 
         // Optional in-form role picker on the user step: [value => label]. Empty = no picker.
         'role_field' => [],
-        'creator' => null,
+        'creator'    => null,
 
         // Extra user-form fields (rendered + validated + persisted as attributes),
         // resolved by UserFormHooks. Either a flat list of field defs (all roles) or
@@ -278,7 +278,7 @@ return [
     */
 
     'license' => [
-        'enabled' => env('INSTALLER_LICENSE', false),
+        'enabled'   => env('INSTALLER_LICENSE', false),
         'skippable' => true,
     ],
 
@@ -296,24 +296,24 @@ return [
     */
 
     'steps' => [
-        'welcome' => ['enabled' => true, 'priority' => 10],
+        'welcome'      => ['enabled' => true, 'priority' => 10],
         'requirements' => ['enabled' => true, 'priority' => 20],
-        'environment' => ['enabled' => true, 'priority' => 30],
-        'migrate' => ['enabled' => true, 'priority' => 40],
-        'user' => ['enabled' => true, 'priority' => 50],
-        'license' => ['enabled' => env('INSTALLER_LICENSE', false), 'priority' => 60],
-        'final' => ['enabled' => true, 'priority' => 70],
+        'environment'  => ['enabled' => true, 'priority' => 30],
+        'migrate'      => ['enabled' => true, 'priority' => 40],
+        'user'         => ['enabled' => true, 'priority' => 50],
+        'license'      => ['enabled' => env('INSTALLER_LICENSE', false), 'priority' => 60],
+        'final'        => ['enabled' => true, 'priority' => 70],
 
         'choice' => [
-            'enabled' => false,
+            'enabled'  => false,
             'priority' => 35,
-            'label' => null,
-            'options' => [],
+            'label'    => null,
+            'options'  => [],
         ],
 
         // Optional, off by default — registered so they're config-toggleable.
         'import-database' => ['enabled' => env('INSTALLER_DB_IMPORT', false), 'priority' => 45],
-        'import-users' => ['enabled' => env('INSTALLER_USERS_IMPORT', false), 'priority' => 55],
+        'import-users'    => ['enabled' => env('INSTALLER_USERS_IMPORT', false), 'priority' => 55],
     ],
 
     /*
@@ -328,8 +328,8 @@ return [
 
     'lock' => [
         'installing' => 'installer.installing',
-        'installed' => 'installer.installed',
-        'timeout' => 30,
+        'installed'  => 'installer.installed',
+        'timeout'    => 30,
     ],
 
     /*
@@ -358,7 +358,7 @@ return [
     */
 
     'wizard' => [
-        'persist_input' => env('INSTALLER_PERSIST_INPUT', true),
+        'persist_input'   => env('INSTALLER_PERSIST_INPUT', true),
         'persist_secrets' => env('INSTALLER_PERSIST_SECRETS', false),
     ],
 
@@ -391,16 +391,16 @@ return [
     */
 
     'notifications' => [
-        'enabled' => env('INSTALLER_NOTIFICATIONS', false),
+        'enabled'  => env('INSTALLER_NOTIFICATIONS', false),
         'channels' => array_filter(explode(',', (string) env('INSTALLER_NOTIFY_CHANNELS', 'mail'))),
-        'mail' => [
+        'mail'     => [
             'to' => array_filter(explode(',', (string) env('INSTALLER_NOTIFY_EMAILS', ''))),
         ],
         // Per-channel routes for non-mail channels, e.g. ['slack' => 'https://hooks.slack…'].
-        'routes' => [],
+        'routes'   => [],
         'security' => [
             'enabled' => env('INSTALLER_SECURITY_ALERTS', false),
-            'to' => array_filter(explode(',', (string) env('INSTALLER_SECURITY_ALERT_EMAILS', ''))),
+            'to'      => array_filter(explode(',', (string) env('INSTALLER_SECURITY_ALERT_EMAILS', ''))),
         ],
     ],
 

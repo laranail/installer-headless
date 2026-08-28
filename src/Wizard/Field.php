@@ -15,9 +15,9 @@ namespace Simtabi\Laranail\Installer\Headless\Wizard;
 final readonly class Field
 {
     /**
-     * @param  list<mixed>  $rules  Laravel validation rules for this field
-     * @param  array<string, string>  $options  value => label, for select fields
-     * @param  array{field:string, in?:list<mixed>, not?:list<mixed>, equals?:mixed}|null  $visibleWhen
+     * @param list<mixed> $rules Laravel validation rules for this field
+     * @param array<string, string> $options value => label, for select fields
+     * @param array{field:string, in?:list<mixed>, not?:list<mixed>, equals?:mixed}|null $visibleWhen
      */
     public function __construct(
         public string $name,
@@ -34,7 +34,7 @@ final readonly class Field
      * Build a field from a config/array definition (used by the field hooks).
      * Returns null for a malformed def (no `name`).
      *
-     * @param  array<string, mixed>  $def
+     * @param array<string, mixed> $def
      */
     public static function fromArray(array $def): ?self
     {
@@ -52,6 +52,27 @@ final readonly class Field
             sensitive: (bool) ($def['sensitive'] ?? false),
             visibleWhen: self::normalizeVisibleWhen($def['visible_when'] ?? null),
         );
+    }
+
+    /**
+     * Whether this field is shown given the current input (conditional visibility).
+     *
+     * @param array<string, mixed> $input
+     */
+    public function isVisible(array $input): bool
+    {
+        if ($this->visibleWhen === null) {
+            return true;
+        }
+
+        $value = $input[$this->visibleWhen['field']] ?? null;
+
+        return match (true) {
+            array_key_exists('in', $this->visibleWhen)     => in_array($value, $this->visibleWhen['in'], true),
+            array_key_exists('not', $this->visibleWhen)    => ! in_array($value, $this->visibleWhen['not'], true),
+            array_key_exists('equals', $this->visibleWhen) => $value === $this->visibleWhen['equals'],
+            default                                        => true,
+        };
     }
 
     /**
@@ -78,26 +99,5 @@ final readonly class Field
         }
 
         return $visibleWhen;
-    }
-
-    /**
-     * Whether this field is shown given the current input (conditional visibility).
-     *
-     * @param  array<string, mixed>  $input
-     */
-    public function isVisible(array $input): bool
-    {
-        if ($this->visibleWhen === null) {
-            return true;
-        }
-
-        $value = $input[$this->visibleWhen['field']] ?? null;
-
-        return match (true) {
-            array_key_exists('in', $this->visibleWhen) => in_array($value, $this->visibleWhen['in'], true),
-            array_key_exists('not', $this->visibleWhen) => ! in_array($value, $this->visibleWhen['not'], true),
-            array_key_exists('equals', $this->visibleWhen) => $value === $this->visibleWhen['equals'],
-            default => true,
-        };
     }
 }

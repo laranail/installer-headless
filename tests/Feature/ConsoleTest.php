@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
 beforeEach(function (): void {
     $this->dir = sys_get_temp_dir() . '/installer-cli-' . uniqid();
@@ -60,12 +60,12 @@ it('provisions the app headlessly from flags', function (): void {
     $dbFile = $this->dir . '/db.sqlite';
 
     $this->artisan('laranail::installer.install', [
-        '--db-driver' => 'sqlite',
-        '--db-name' => $dbFile,
-        '--app-name' => 'CLI App',
-        '--app-url' => 'http://cli.test',
-        '--user-name' => 'Ada',
-        '--user-email' => 'ada@example.com',
+        '--db-driver'     => 'sqlite',
+        '--db-name'       => $dbFile,
+        '--app-name'      => 'CLI App',
+        '--app-url'       => 'http://cli.test',
+        '--user-name'     => 'Ada',
+        '--user-email'    => 'ada@example.com',
         '--user-password' => 'secret-pass',
     ])->assertExitCode(0);
 

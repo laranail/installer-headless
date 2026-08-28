@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Simtabi\Laranail\Installer\Headless\Users\UserData;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
-use Simtabi\Laranail\Installer\Headless\Users\UserData;
 
 beforeEach(function (): void {
     Schema::create('users', function (Blueprint $table): void {

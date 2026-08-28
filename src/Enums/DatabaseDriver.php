@@ -16,14 +16,22 @@ enum DatabaseDriver: string
     case Sqlsrv = 'sqlsrv';
     case Sqlite = 'sqlite';
 
+    /**
+     * @return list<string>
+     */
+    public static function values(): array
+    {
+        return array_map(static fn (self $case): string => $case->value, self::cases());
+    }
+
     public function label(): string
     {
         return match ($this) {
-            self::Mysql => 'MySQL',
+            self::Mysql   => 'MySQL',
             self::Mariadb => 'MariaDB',
-            self::Pgsql => 'PostgreSQL',
-            self::Sqlsrv => 'SQL Server',
-            self::Sqlite => 'SQLite',
+            self::Pgsql   => 'PostgreSQL',
+            self::Sqlsrv  => 'SQL Server',
+            self::Sqlite  => 'SQLite',
         };
     }
 
@@ -31,9 +39,9 @@ enum DatabaseDriver: string
     {
         return match ($this) {
             self::Mysql, self::Mariadb => 3306,
-            self::Pgsql => 5432,
-            self::Sqlsrv => 1433,
-            self::Sqlite => null,
+            self::Pgsql                => 5432,
+            self::Sqlsrv               => 1433,
+            self::Sqlite               => null,
         };
     }
 
@@ -45,13 +53,5 @@ enum DatabaseDriver: string
     public function requiresHost(): bool
     {
         return $this !== self::Sqlite;
-    }
-
-    /**
-     * @return list<string>
-     */
-    public static function values(): array
-    {
-        return array_map(static fn (self $case): string => $case->value, self::cases());
     }
 }

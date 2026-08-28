@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Support;
 
+use function dirname;
+
 use Simtabi\Laranail\Installer\Headless\Exceptions\EnvironmentException;
 
 /**
@@ -39,7 +41,7 @@ final class EnvWriter
     /**
      * Update specific keys in an existing .env (others untouched), atomically.
      *
-     * @param  array<string, string>  $values
+     * @param array<string, string> $values
      */
     public function update(string $path, array $values): EnvFile
     {
@@ -53,7 +55,7 @@ final class EnvWriter
     /**
      * Generate a target .env from an example template plus overrides.
      *
-     * @param  array<string, string>  $values
+     * @param array<string, string> $values
      */
     public function generate(string $examplePath, string $targetPath, array $values = []): EnvFile
     {
@@ -66,7 +68,7 @@ final class EnvWriter
 
     private function writeAtomic(string $path, string $contents): void
     {
-        $directory = \dirname($path);
+        $directory = dirname($path);
 
         if (! is_dir($directory) || ! is_writable($directory)) {
             throw EnvironmentException::unwritable($path);

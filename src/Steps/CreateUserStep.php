@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Override;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Users\UserData;
 use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
 
 /**
  * Creates the first user account from collected input (idempotent).
@@ -60,6 +60,20 @@ class CreateUserStep extends AbstractStep
         return $this->label ?? parent::label();
     }
 
+    public function run(InstallerContext $context): void
+    {
+        $input = $this->captureExtras($context->allInput());
+
+        // A typed step's role seeds UserData unless the form already supplied one.
+        if ($this->role !== null && (string) ($input['role'] ?? '') === '') {
+            $input['role'] = $this->role;
+        }
+
+        $user = $this->creator->create(UserData::fromArray($input));
+
+        $context->set($this->key, $user);
+    }
+
     #[Override]
     protected function stepFields(): array
     {
@@ -70,6 +84,27 @@ class CreateUserStep extends AbstractStep
             new Field('password_confirmation', 'Confirm password', 'password', '', sensitive: true),
             ...$this->roleField(),
         ];
+    }
+
+    /**
+     * Extra fields for the user step: role-based fields from {@see UserFormHooks}
+     * plus the generic per-step {@see StepFieldHooks} (via the parent), with reserved
+     * core names removed so they can never shadow the core fields' rules or values.
+     *
+     * @return list<Field>
+     */
+    #[Override]
+    protected function resolveExtraFields(): array
+    {
+        $byName = [];
+
+        foreach ([...$this->formHooks->resolveFields($this->configuredRole()), ...parent::resolveExtraFields()] as $field) {
+            if (! in_array($field->name, self::RESERVED, true)) {
+                $byName[$field->name] = $field;
+            }
+        }
+
+        return array_values($byName);
     }
 
     /**
@@ -110,46 +145,12 @@ class CreateUserStep extends AbstractStep
         return [new Field('name', 'Name', 'text', '', ['required', 'string', 'max:120'])];
     }
 
-    public function run(InstallerContext $context): void
-    {
-        $input = $this->captureExtras($context->allInput());
-
-        // A typed step's role seeds UserData unless the form already supplied one.
-        if ($this->role !== null && (string) ($input['role'] ?? '') === '') {
-            $input['role'] = $this->role;
-        }
-
-        $user = $this->creator->create(UserData::fromArray($input));
-
-        $context->set($this->key, $user);
-    }
-
-    /**
-     * Extra fields for the user step: role-based fields from {@see UserFormHooks}
-     * plus the generic per-step {@see StepFieldHooks} (via the parent), with reserved
-     * core names removed so they can never shadow the core fields' rules or values.
-     *
-     * @return list<Field>
-     */
-    #[Override]
-    protected function resolveExtraFields(): array
-    {
-        $byName = [];
-
-        foreach ([...$this->formHooks->resolveFields($this->configuredRole()), ...parent::resolveExtraFields()] as $field) {
-            if (! in_array($field->name, self::RESERVED, true)) {
-                $byName[$field->name] = $field;
-            }
-        }
-
-        return array_values($byName);
-    }
-
     /**
      * Move the values of the (non-reserved) hook fields into `extra` so they persist
      * as user attributes; the core name/email/password keys are handled directly.
      *
-     * @param  array<string, mixed>  $input
+     * @param array<string, mixed> $input
+     *
      * @return array<string, mixed>
      */
     private function captureExtras(array $input): array

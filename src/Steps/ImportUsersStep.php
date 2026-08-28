@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Override;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
+use Simtabi\Laranail\Installer\Headless\Users\UserData;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
-use Simtabi\Laranail\Installer\Headless\Users\UserData;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * Bulk-imports users from a CSV file (header row → columns) or an array, reusing the
@@ -34,14 +34,6 @@ class ImportUsersStep extends AbstractStep
         $this->creator = $creator ?? app(UserAccountCreator::class);
     }
 
-    #[Override]
-    protected function stepFields(): array
-    {
-        return [
-            new Field('path', 'Users CSV path', 'text', (string) config('installer.users.import.path', ''), ['nullable', 'string']),
-        ];
-    }
-
     public function run(InstallerContext $context): void
     {
         $this->raiseTimeLimit();
@@ -58,6 +50,14 @@ class ImportUsersStep extends AbstractStep
         if ($count > 0) {
             $context->set('imported_users', $count);
         }
+    }
+
+    #[Override]
+    protected function stepFields(): array
+    {
+        return [
+            new Field('path', 'Users CSV path', 'text', (string) config('installer.users.import.path', ''), ['nullable', 'string']),
+        ];
     }
 
     /**

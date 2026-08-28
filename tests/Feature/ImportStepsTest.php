@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Simtabi\Laranail\Installer\Headless\Steps\ImportDatabaseStep;
-use Simtabi\Laranail\Installer\Headless\Steps\ImportUsersStep;
+use Illuminate\Database\Schema\Blueprint;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
+use Simtabi\Laranail\Installer\Headless\Steps\ImportUsersStep;
+use Simtabi\Laranail\Installer\Headless\Steps\ImportDatabaseStep;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 
 function importUsersTable(): void
 {

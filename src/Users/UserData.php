@@ -14,7 +14,7 @@ final readonly class UserData
      * `name` is always the composed display name (for single-column models);
      * `firstName`/`lastName` are kept for split-column models.
      *
-     * @param  array<string, mixed>  $extra  additional attributes to persist
+     * @param array<string, mixed> $extra additional attributes to persist
      */
     public function __construct(
         public string $name,
@@ -27,7 +27,7 @@ final readonly class UserData
     ) {}
 
     /**
-     * @param  array<string, mixed>  $input
+     * @param array<string, mixed> $input
      */
     public static function fromArray(array $input): self
     {

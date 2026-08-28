@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Installer\Headless\Exceptions\EnvironmentException;
 use Simtabi\Laranail\Installer\Headless\Support\EnvFile;
 use Simtabi\Laranail\Installer\Headless\Support\EnvWriter;
+use Simtabi\Laranail\Installer\Headless\Exceptions\EnvironmentException;
 
 beforeEach(function (): void {
     $this->dir = sys_get_temp_dir() . '/installer-env-' . uniqid();
@@ -25,7 +25,7 @@ it('generates a target .env from an example plus overrides', function (): void {
 
     $writer = new EnvWriter;
     $writer->generate($this->dir . '/.env.example', $this->dir . '/.env', [
-        'APP_NAME' => 'Real App',
+        'APP_NAME'    => 'Real App',
         'DB_DATABASE' => 'real_db',
     ]);
 

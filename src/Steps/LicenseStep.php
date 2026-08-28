@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Override;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Exceptions\LicenseException;
 use Simtabi\Laranail\Installer\Headless\Licensing\LicenseStepAdapter;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * License verification step. Off by default; when enabled it delegates activation
@@ -24,16 +24,6 @@ class LicenseStep extends AbstractStep
     protected int $defaultPriority = 60;
 
     public function __construct(private readonly InstallationState $state) {}
-
-    #[Override]
-    protected function stepFields(): array
-    {
-        return [
-            new Field('purchase_code', 'Purchase code', 'text', '', ['required_without:skip_license', 'string'], sensitive: true),
-            new Field('buyer', 'Buyer / username', 'text', '', ['required_without:skip_license', 'string']),
-            new Field('skip_license', 'Skip for now', 'checkbox'),
-        ];
-    }
 
     public function run(InstallerContext $context): void
     {
@@ -55,5 +45,15 @@ class LicenseStep extends AbstractStep
 
         ($context->state() ?? $this->state)->remember('license', $result->licensedTo ?? $result->status->value);
         $context->set('license', $result);
+    }
+
+    #[Override]
+    protected function stepFields(): array
+    {
+        return [
+            new Field('purchase_code', 'Purchase code', 'text', '', ['required_without:skip_license', 'string'], sensitive: true),
+            new Field('buyer', 'Buyer / username', 'text', '', ['required_without:skip_license', 'string']),
+            new Field('skip_license', 'Skip for now', 'checkbox'),
+        ];
     }
 }

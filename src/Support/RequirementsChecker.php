@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Support;
 
+use function dirname;
+
 /**
  * Evaluates server requirements (PHP version, extensions, Apache modules and
  * writable paths) from the `installer.requirements` config. Required extensions
@@ -21,13 +23,14 @@ final class RequirementsChecker
 
         return [
             'required' => $minimum,
-            'current' => PHP_VERSION,
-            'passes' => version_compare(PHP_VERSION, $minimum, '>='),
+            'current'  => PHP_VERSION,
+            'passes'   => version_compare(PHP_VERSION, $minimum, '>='),
         ];
     }
 
     /**
-     * @param  list<string>  $extensions
+     * @param list<string> $extensions
+     *
      * @return array<string, bool>
      */
     public function checkExtensions(array $extensions): array
@@ -42,7 +45,8 @@ final class RequirementsChecker
     }
 
     /**
-     * @param  list<string>  $modules
+     * @param list<string> $modules
+     *
      * @return array<string, bool|null> null = cannot be determined (non-Apache SAPI)
      */
     public function checkApacheModules(array $modules): array
@@ -59,7 +63,8 @@ final class RequirementsChecker
     }
 
     /**
-     * @param  list<string>  $paths  paths relative to base_path()
+     * @param list<string> $paths paths relative to base_path()
+     *
      * @return array<string, bool>
      */
     public function checkPermissions(array $paths): array
@@ -71,7 +76,7 @@ final class RequirementsChecker
 
             // For a not-yet-created file (e.g. .env on a fresh install), the relevant
             // test is whether its parent directory is writable — not the absent file.
-            $results[$path] = file_exists($full) ? is_writable($full) : is_writable(\dirname($full));
+            $results[$path] = file_exists($full) ? is_writable($full) : is_writable(dirname($full));
         }
 
         return $results;
@@ -100,50 +105,26 @@ final class RequirementsChecker
 
         return [
             'disable_functions' => [
-                'ok' => true,
+                'ok'     => true,
                 'detail' => $blocked === [] ? 'none' : implode(', ', $blocked) . ' disabled (installer does not require them)',
             ],
             'max_execution_time' => [
-                'ok' => $time === 0 || $time >= 30,
+                'ok'     => $time === 0 || $time >= 30,
                 'detail' => $time === 0 ? 'unlimited' : $time . 's (raise it for large migrations/imports)',
             ],
             'memory_limit' => [
-                'ok' => $memory < 0 || $memory >= 128 * 1024 * 1024,
+                'ok'     => $memory < 0 || $memory >= 128 * 1024 * 1024,
                 'detail' => $memoryLimit,
             ],
             'session_driver' => [
-                'ok' => ! $this->dbBacked($session),
+                'ok'     => ! $this->dbBacked($session),
                 'detail' => $session . ($this->dbBacked($session) ? ' — overridden to file during install' : ''),
             ],
             'cache_store' => [
-                'ok' => ! $this->dbBacked($cache),
+                'ok'     => ! $this->dbBacked($cache),
                 'detail' => $cache . ($this->dbBacked($cache) ? ' — overridden to file during install' : ''),
             ],
         ];
-    }
-
-    private function dbBacked(string $driver): bool
-    {
-        return in_array($driver, ['database', 'redis'], true);
-    }
-
-    private function bytes(string $value): int
-    {
-        $value = trim($value);
-
-        if ($value === '' || $value === '-1') {
-            return -1;
-        }
-
-        $unit = strtolower($value[strlen($value) - 1]);
-        $number = (int) $value;
-
-        return match ($unit) {
-            'g' => $number * 1024 * 1024 * 1024,
-            'm' => $number * 1024 * 1024,
-            'k' => $number * 1024,
-            default => $number,
-        };
     }
 
     /**
@@ -177,13 +158,37 @@ final class RequirementsChecker
             && ! in_array(false, $permissions, true);
 
         return [
-            'php' => $php,
-            'extensions' => $extensions,
-            'optional' => $optional,
-            'apache' => $apache,
+            'php'         => $php,
+            'extensions'  => $extensions,
+            'optional'    => $optional,
+            'apache'      => $apache,
             'permissions' => $permissions,
-            'warnings' => $this->warnings(),
-            'passes' => $passes,
+            'warnings'    => $this->warnings(),
+            'passes'      => $passes,
         ];
+    }
+
+    private function dbBacked(string $driver): bool
+    {
+        return in_array($driver, ['database', 'redis'], true);
+    }
+
+    private function bytes(string $value): int
+    {
+        $value = trim($value);
+
+        if ($value === '' || $value === '-1') {
+            return -1;
+        }
+
+        $unit = strtolower($value[strlen($value) - 1]);
+        $number = (int) $value;
+
+        return match ($unit) {
+            'g'     => $number * 1024 * 1024 * 1024,
+            'm'     => $number * 1024 * 1024,
+            'k'     => $number * 1024,
+            default => $number,
+        };
     }
 }

@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Simtabi\Laranail\Installer\Headless\Steps\FinalStep;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
 beforeEach(fn () => app(InstallationState::class)->clear());
 

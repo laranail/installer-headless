@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
 beforeEach(function (): void {
     $this->dir = sys_get_temp_dir() . '/installer-run-' . uniqid();
@@ -41,14 +41,14 @@ afterEach(function (): void {
 function installContext(string $dbFile): InstallerContext
 {
     return InstallerContext::fromInput([
-        'locale' => 'en',
-        'app_name' => 'Test App',
-        'app_url' => 'http://test.local',
-        'database_driver' => 'sqlite',
-        'database_name' => $dbFile,
-        'name' => 'Ada Lovelace',
-        'email' => 'ada@example.com',
-        'password' => 'secret-pass',
+        'locale'                => 'en',
+        'app_name'              => 'Test App',
+        'app_url'               => 'http://test.local',
+        'database_driver'       => 'sqlite',
+        'database_name'         => $dbFile,
+        'name'                  => 'Ada Lovelace',
+        'email'                 => 'ada@example.com',
+        'password'              => 'secret-pass',
         'password_confirmation' => 'secret-pass',
     ]);
 }
