@@ -1,14 +1,17 @@
 name: Tests
 
 on:
-  push:
-    branches: [main]
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   pest:
     name: PHP ${{ matrix.php }} · ${{ matrix.dependency-versions }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       # Authenticate composer's GitHub API access so VCS resolution of sibling
       # laranail packages isn't rate-limited (HTTP 429) on unauthenticated runners.
