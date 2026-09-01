@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Support;
 
-use Throwable;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Crypt;
+use Throwable;
 
 /**
  * Single source of truth for "is this app installed?" and per-step progress.
@@ -192,7 +192,7 @@ final class InstallationState
      * `installer.wizard.persist_secrets` is true the whole payload is stored
      * encrypted at rest.
      *
-     * @param array<string, mixed> $input
+     * @param  array<string, mixed>  $input
      */
     public function rememberInput(string $step, array $input): void
     {
@@ -256,19 +256,19 @@ final class InstallationState
     public function status(): array
     {
         return [
-            'enabled'          => (bool) config('installer.enabled', true),
-            'installed'        => $this->isInstalled(),
-            'installing'       => $this->isInstalling(),
+            'enabled' => (bool) config('installer.enabled', true),
+            'installed' => $this->isInstalled(),
+            'installing' => $this->isInstalling(),
             'installed_marker' => $this->hasInstalledMarker(),
-            'database_ready'   => $this->isDatabaseReady(),
-            'critical_tables'  => $this->hasCriticalTables(),
-            'app_key'          => $this->hasAppKey(),
+            'database_ready' => $this->isDatabaseReady(),
+            'critical_tables' => $this->hasCriticalTables(),
+            'app_key' => $this->hasAppKey(),
         ];
     }
 
     public function markerPath(string $which): string
     {
-        $name = (string) config('installer.lock.' . $which, 'installer.' . $which);
+        $name = (string) config('installer.lock.'.$which, 'installer.'.$which);
 
         return storage_path($this->scopedName($name));
     }
@@ -335,7 +335,7 @@ final class InstallationState
     }
 
     /**
-     * @param array{completed?: array<string, string>, data?: array<string, mixed>, input?: array<string, mixed>} $state
+     * @param  array{completed?: array<string, string>, data?: array<string, mixed>, input?: array<string, mixed>}  $state
      */
     private function writeState(array $state): void
     {

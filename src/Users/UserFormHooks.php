@@ -41,8 +41,7 @@ final class UserFormHooks
      * Resolve the extra fields for a role (config + runtime providers), de-duplicated
      * by field name (later definitions win).
      *
-     * @param array<string, mixed> $context
-     *
+     * @param  array<string, mixed>  $context
      * @return list<Field>
      */
     public function resolveFields(?string $role = null, array $context = []): array
@@ -100,7 +99,7 @@ final class UserFormHooks
     }
 
     /**
-     * @param array<int|string, mixed> $defs
+     * @param  array<int|string, mixed>  $defs
      */
     private function isRoleKeyed(array $defs): bool
     {

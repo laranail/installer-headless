@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Simtabi\Laranail\Installer\Headless\Support\RequirementsChecker;
 
 it('treats a not-yet-created path as writable when its parent directory is', function (): void {
-    $missing = '.env-missing-' . uniqid();
+    $missing = '.env-missing-'.uniqid();
     config()->set('installer.requirements.permissions', [$missing]);
 
     $report = (new RequirementsChecker)->checkPermissions([$missing]);

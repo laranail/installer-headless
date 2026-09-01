@@ -14,10 +14,10 @@ use Simtabi\Laranail\Installer\Headless\Enums\InstallType;
 final readonly class ProductPipeline
 {
     /**
-     * @param list<string> $steps ordered step keys ([] = full default pipeline)
-     * @param array<string, int> $priorities explicit priority overrides (else order is derived from $steps)
-     * @param array<string, mixed> $config per-product config (read via InstallerContext::productConfig)
-     * @param bool $configOverlay also merge $config into global installer.* during execution
+     * @param  list<string>  $steps  ordered step keys ([] = full default pipeline)
+     * @param  array<string, int>  $priorities  explicit priority overrides (else order is derived from $steps)
+     * @param  array<string, mixed>  $config  per-product config (read via InstallerContext::productConfig)
+     * @param  bool  $configOverlay  also merge $config into global installer.* during execution
      */
     public function __construct(
         public string $slug,
@@ -33,7 +33,7 @@ final readonly class ProductPipeline
      * Build from a `config('installer.products.<slug>')` entry. A `type` supplies the
      * default steps/priorities, which explicit `steps`/`priorities` then override.
      *
-     * @param array<string, mixed> $def
+     * @param  array<string, mixed>  $def
      */
     public static function fromConfig(string $slug, array $def): self
     {

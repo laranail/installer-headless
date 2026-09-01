@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
+use Simtabi\Laranail\Installer\Headless\Exceptions\RequirementsException;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Support\RequirementsChecker;
-use Simtabi\Laranail\Installer\Headless\Exceptions\RequirementsException;
 
 /**
  * Verifies server requirements. Stores the full report in the context (for the

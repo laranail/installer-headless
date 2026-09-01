@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Support;
 
-use function dirname;
-
 use Simtabi\Laranail\Installer\Headless\Exceptions\EnvironmentException;
+
+use function dirname;
 
 /**
  * Reads and writes .env files for the installer.
@@ -41,7 +41,7 @@ final class EnvWriter
     /**
      * Update specific keys in an existing .env (others untouched), atomically.
      *
-     * @param array<string, string> $values
+     * @param  array<string, string>  $values
      */
     public function update(string $path, array $values): EnvFile
     {
@@ -55,7 +55,7 @@ final class EnvWriter
     /**
      * Generate a target .env from an example template plus overrides.
      *
-     * @param array<string, string> $values
+     * @param  array<string, string>  $values
      */
     public function generate(string $examplePath, string $targetPath, array $values = []): EnvFile
     {

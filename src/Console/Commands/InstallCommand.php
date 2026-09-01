@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Console\Commands;
 
-use function Laravel\Prompts\text;
-use function Laravel\Prompts\select;
-use function Laravel\Prompts\password;
-
 use Illuminate\Validation\ValidationException;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Console\Progress\ProgressReporter;
-use Simtabi\Laranail\Installer\Headless\Contracts\Step;
-use Simtabi\Laranail\Installer\Headless\InstallerEngine;
-use Simtabi\Laranail\Installer\Headless\Support\ProductRegistry;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
-use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
 use Simtabi\Laranail\Installer\Headless\Console\Commands\Concerns\GuardsInstallerAccess;
+use Simtabi\Laranail\Installer\Headless\Contracts\Step;
+use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
+use Simtabi\Laranail\Installer\Headless\InstallerEngine;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\ProductRegistry;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
+
+use function Laravel\Prompts\password;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 /**
  * Headless installer — runs the active pipeline non-interactively from flags/env
@@ -32,18 +32,18 @@ final class InstallCommand extends Command
 
     /** Friendly flag aliases mapped to step field names. */
     private const array ALIASES = [
-        'app_name'          => 'app-name',
-        'app_url'           => 'app-url',
-        'database_driver'   => 'db-driver',
-        'database_host'     => 'db-host',
-        'database_port'     => 'db-port',
-        'database_name'     => 'db-name',
+        'app_name' => 'app-name',
+        'app_url' => 'app-url',
+        'database_driver' => 'db-driver',
+        'database_host' => 'db-host',
+        'database_port' => 'db-port',
+        'database_name' => 'db-name',
         'database_username' => 'db-username',
         'database_password' => 'db-password',
-        'name'              => 'user-name',
-        'email'             => 'user-email',
-        'password'          => 'user-password',
-        'locale'            => 'locale',
+        'name' => 'user-name',
+        'email' => 'user-email',
+        'password' => 'user-password',
+        'locale' => 'locale',
     ];
 
     protected $signature = 'laranail::installer.install
@@ -78,10 +78,10 @@ final class InstallCommand extends Command
         foreach ($this->resolveTargets($products) as $slug) {
             $scopedEngine = $engine->forProduct($slug);
             $scopedState = $slug !== null ? $state->forProduct($slug) : $state;
-            $label = $slug !== null ? "Installing {$slug}" : 'Installing ' . config('app.name', 'application');
+            $label = $slug !== null ? "Installing {$slug}" : 'Installing '.config('app.name', 'application');
 
             if ($scopedState->isInstalled() && ! $force) {
-                $this->warn(($slug !== null ? "[{$slug}] " : '') . 'Already installed. Use --force to re-run.');
+                $this->warn(($slug !== null ? "[{$slug}] " : '').'Already installed. Use --force to re-run.');
 
                 continue;
             }
@@ -132,7 +132,7 @@ final class InstallCommand extends Command
                 $engine->orderedSteps(),
                 function (Step $step) use ($engine, $state, $context, $resume): string {
                     if ($resume && $state->isStepComplete($step->key())) {
-                        return $step->label() . ' (skipped)';
+                        return $step->label().' (skipped)';
                     }
 
                     $engine->runStep($step->key(), $context);
@@ -144,7 +144,7 @@ final class InstallCommand extends Command
             $this->error('Validation failed:');
 
             foreach ($exception->validator->errors()->all() as $message) {
-                $this->line('  • ' . $message);
+                $this->line('  • '.$message);
             }
 
             return self::FAILURE;
@@ -207,8 +207,8 @@ final class InstallCommand extends Command
      * Resolve a field's value: --field override → friendly alias flag → prompt
      * (interactive) → field default.
      *
-     * @param array<string, string> $overrides
-     * @param array<string, mixed> $collected
+     * @param  array<string, string>  $overrides
+     * @param  array<string, mixed>  $collected
      */
     private function valueForField(Field $field, array $overrides, array $collected): mixed
     {
@@ -239,7 +239,7 @@ final class InstallCommand extends Command
 
         return match ($field->type) {
             'password' => password($field->label, required: $required),
-            'select'   => $field->options !== []
+            'select' => $field->options !== []
                 ? select($field->label, $field->options)
                 : text($field->label, required: $required),
             default => text($field->label, default: is_string($field->default) ? $field->default : '', required: $required),

@@ -34,8 +34,7 @@ class StepFieldHooks
      * Resolve a step's extra fields (config first, then runtime providers),
      * de-duplicated by field name (later wins).
      *
-     * @param array<string, mixed> $context
-     *
+     * @param  array<string, mixed>  $context
      * @return list<Field>
      */
     public function resolve(string $step, array $context = []): array

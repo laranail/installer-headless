@@ -35,7 +35,7 @@ class StepRegistry
     }
 
     /**
-     * @param iterable<Step> $steps
+     * @param  iterable<Step>  $steps
      */
     public function registerMany(iterable $steps): self
     {
@@ -109,8 +109,8 @@ class StepRegistry
      * explicit priority is given for a key. Unknown keys are skipped. Used by the
      * per-product orchestrator ({@see InstallerEngine::forProduct}).
      *
-     * @param list<string> $keys
-     * @param array<string, int> $priorities
+     * @param  list<string>  $keys
+     * @param  array<string, int>  $priorities
      */
     public function select(array $keys, array $priorities = []): self
     {

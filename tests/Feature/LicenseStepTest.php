@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Licence\Verifier\LicenseManager;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
-use Simtabi\Laranail\Licence\Verifier\Drivers\NullDriver;
-use Simtabi\Laranail\Installer\Headless\Steps\LicenseStep;
-use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
-use Simtabi\Laranail\Licence\Verifier\Drivers\EnvatoDriver;
-use Simtabi\Laranail\Licence\Verifier\Drivers\DriverManager;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Exceptions\LicenseException;
 use Simtabi\Laranail\Installer\Headless\Licensing\LicenseStepAdapter;
+use Simtabi\Laranail\Installer\Headless\Steps\LicenseStep;
+use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\FailingDriver;
-use Simtabi\Laranail\Licence\Verifier\ValueObjects\VerificationResult;
-use Simtabi\Laranail\Licence\Verifier\Providers\LicenceVerifierServiceProvider;
 use Simtabi\Laranail\Licence\Verifier\Contracts\Capabilities\SupportsDomainBinding;
+use Simtabi\Laranail\Licence\Verifier\Drivers\DriverManager;
+use Simtabi\Laranail\Licence\Verifier\Drivers\EnvatoDriver;
+use Simtabi\Laranail\Licence\Verifier\Drivers\NullDriver;
+use Simtabi\Laranail\Licence\Verifier\LicenseManager;
+use Simtabi\Laranail\Licence\Verifier\Providers\LicenceVerifierServiceProvider;
+use Simtabi\Laranail\Licence\Verifier\ValueObjects\VerificationResult;
 
 beforeEach(function (): void {
     $this->app->register(LicenceVerifierServiceProvider::class);
@@ -40,8 +40,8 @@ it('activates through license-verifier (null driver passes)', function (): void 
 
     $context = InstallerContext::fromInput([
         'purchase_code' => 'CODE-123',
-        'buyer'         => 'Ada',
-        'app_url'       => 'http://test.local',
+        'buyer' => 'Ada',
+        'app_url' => 'http://test.local',
     ]);
 
     new LicenseStep($this->state)->run($context);

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 
 /**
  * Generic single-select step (shipped, disabled by default).

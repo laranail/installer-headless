@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Console\Commands;
 
 use Illuminate\Support\Facades\App;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Console\Commands\Concerns\GuardsInstallerAccess;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
 /**
  * Clears installer state (markers + step progress) so the wizard can run again.

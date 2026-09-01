@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
-use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
-use Simtabi\Laranail\Installer\Headless\Steps\ImportUsersStep;
 use Simtabi\Laranail\Installer\Headless\Steps\ImportDatabaseStep;
+use Simtabi\Laranail\Installer\Headless\Steps\ImportUsersStep;
+use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 
 function importUsersTable(): void
 {
@@ -43,7 +43,7 @@ it('registers both import steps disabled (config-toggleable)', function (): void
 
 it('imports users from a CSV file', function (): void {
     importUsersTable();
-    $csv = sys_get_temp_dir() . '/users-' . uniqid() . '.csv';
+    $csv = sys_get_temp_dir().'/users-'.uniqid().'.csv';
     file_put_contents($csv, "name,email,password,role\nAda,ada@x.test,secret-pass,admin\nBo,bo@x.test,secret-pass,member\n");
     config()->set('installer.users.import.path', $csv);
 
@@ -67,7 +67,7 @@ it('imports users from an inline rows array', function (): void {
 });
 
 it('imports a SQL dump via db-tools', function (): void {
-    $sql = sys_get_temp_dir() . '/dump-' . uniqid() . '.sql';
+    $sql = sys_get_temp_dir().'/dump-'.uniqid().'.sql';
     file_put_contents($sql, "CREATE TABLE widgets (id integer primary key autoincrement, name varchar(50));\nINSERT INTO widgets (name) VALUES ('gear');\n");
     config()->set('installer.database.import.path', $sql);
 

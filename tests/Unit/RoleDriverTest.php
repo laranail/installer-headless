@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Simtabi\Laranail\Installer\Headless\Users\RoleManager;
+use Illuminate\Support\Facades\Schema;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
+use Simtabi\Laranail\Installer\Headless\Users\RoleDrivers\EloquentRoleDriver;
 use Simtabi\Laranail\Installer\Headless\Users\RoleDrivers\NullRoleDriver;
 use Simtabi\Laranail\Installer\Headless\Users\RoleDrivers\SpatieRoleDriver;
-use Simtabi\Laranail\Installer\Headless\Users\RoleDrivers\EloquentRoleDriver;
+use Simtabi\Laranail\Installer\Headless\Users\RoleManager;
 
 it('null driver is a harmless no-op', function (): void {
     $user = (object) ['role' => null];

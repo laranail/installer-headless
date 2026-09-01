@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Doctor;
 
-use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorCheck;
 use Simtabi\Laranail\Installer\Headless\Providers\InstallerServiceProvider;
 use Simtabi\Laranail\Package\Tools\Services\Doctor\Checks\ConfigPresentCheck;
+use Simtabi\Laranail\Package\Tools\Services\Doctor\DoctorCheck;
 
 /**
  * Doctor checks for the headless installer.

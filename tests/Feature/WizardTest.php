@@ -65,7 +65,7 @@ it('persists secrets encrypted when enabled', function (): void {
     $state->rememberInput('environment', ['app_name' => 'Acme', 'database_password' => 'super-secret']);
 
     expect($state->recallInput('environment'))->toMatchArray([
-        'app_name'          => 'Acme',
+        'app_name' => 'Acme',
         'database_password' => 'super-secret',
     ]);
 
