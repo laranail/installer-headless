@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Console\Commands;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Simtabi\Laranail\Installer\Headless\Support\EnvWriter;
 
 /**
@@ -24,8 +24,8 @@ final class GenerateTokenCommand extends Command
         $token = Str::random(64);
         $hash = Hash::make($token);
 
-        $this->line('Installer token: <info>' . $token . '</info>');
-        $this->line('Token hash:      ' . $hash);
+        $this->line('Installer token: <info>'.$token.'</info>');
+        $this->line('Token hash:      '.$hash);
 
         if (! $this->option('write') && ! $this->option('hash')) {
             $this->newLine();

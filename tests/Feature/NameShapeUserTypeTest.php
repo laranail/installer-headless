@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
-use Simtabi\Laranail\Installer\Headless\Users\UserData;
+use Illuminate\Support\Facades\Schema;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
+use Simtabi\Laranail\Installer\Headless\Users\UserData;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 function makeUsersTable(): void
 {
@@ -27,7 +27,7 @@ function makeUsersTable(): void
 
     config()->set('installer.user.model', User::class);
     config()->set('installer.user.fields', [
-        'name'  => 'name', 'first_name' => 'first_name', 'last_name' => 'last_name',
+        'name' => 'name', 'first_name' => 'first_name', 'last_name' => 'last_name',
         'email' => 'email', 'password' => 'password',
     ]);
 }

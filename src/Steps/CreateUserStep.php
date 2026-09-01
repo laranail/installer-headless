@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Override;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
-use Simtabi\Laranail\Installer\Headless\Users\UserData;
-use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
+use Simtabi\Laranail\Installer\Headless\Users\UserData;
+use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * Creates the first user account from collected input (idempotent).
@@ -149,8 +149,7 @@ class CreateUserStep extends AbstractStep
      * Move the values of the (non-reserved) hook fields into `extra` so they persist
      * as user attributes; the core name/email/password keys are handled directly.
      *
-     * @param array<string, mixed> $input
-     *
+     * @param  array<string, mixed>  $input
      * @return array<string, mixed>
      */
     private function captureExtras(array $input): array

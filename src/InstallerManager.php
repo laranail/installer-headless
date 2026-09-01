@@ -7,16 +7,16 @@ namespace Simtabi\Laranail\Installer\Headless;
 use Closure;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Traits\Macroable;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
-use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
-use Simtabi\Laranail\Installer\Headless\Support\StepPipelines;
-use Simtabi\Laranail\Installer\Headless\Testing\InstallerFake;
-use Simtabi\Laranail\Installer\Headless\Support\StepFieldHooks;
 use Simtabi\Laranail\Installer\Headless\Support\ProductPipeline;
 use Simtabi\Laranail\Installer\Headless\Support\ProductRegistry;
+use Simtabi\Laranail\Installer\Headless\Support\StepFieldHooks;
+use Simtabi\Laranail\Installer\Headless\Support\StepPipelines;
+use Simtabi\Laranail\Installer\Headless\Testing\InstallerFake;
 use Simtabi\Laranail\Installer\Headless\Users\UserCreationHooks;
+use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * Fluent, runtime registration DSL — a single entry point a consumer drives from
@@ -99,7 +99,7 @@ class InstallerManager
     /**
      * Add a transform stage to a step's input pipeline (runs before validation).
      *
-     * @param class-string|callable $stage
+     * @param  class-string|callable  $stage
      */
     public function pipe(string $step, string|callable $stage): static
     {
@@ -111,7 +111,7 @@ class InstallerManager
     // --- Products ---------------------------------------------------------
 
     /**
-     * @param array<string, mixed> $definition
+     * @param  array<string, mixed>  $definition
      */
     public function product(string $slug, array $definition = []): static
     {
@@ -158,7 +158,7 @@ class InstallerManager
      *       new Field('company', 'Company', 'text', '', ['required', 'string', 'max:120']),
      *   ]);
      *
-     * @param callable(?string, array<string, mixed>): iterable<Field> $provider
+     * @param  callable(?string, array<string, mixed>): iterable<Field>  $provider
      */
     public function userFields(callable $provider): static
     {
@@ -170,7 +170,7 @@ class InstallerManager
     // --- Events -----------------------------------------------------------
 
     /**
-     * @param Closure|class-string $listener
+     * @param  Closure|class-string  $listener
      */
     public function listen(string $event, Closure|string $listener): static
     {

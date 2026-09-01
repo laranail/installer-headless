@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Contracts;
 
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * A single unit of the install pipeline / wizard. The same `run()` is the one
@@ -39,8 +39,7 @@ interface Step
      * Laravel validation rules for the visible fields, given current input.
      * The single validation source consumed by both CLI and web.
      *
-     * @param array<string, mixed> $input
-     *
+     * @param  array<string, mixed>  $input
      * @return array<string, mixed>
      */
     public function rules(array $input = []): array;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
-use Override;
 use Illuminate\Support\Facades\App;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Override;
 use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * Records the chosen UI locale (from the configured `installer.locales`) and
@@ -48,7 +48,7 @@ class WelcomeStep extends AbstractStep
                 label: 'Language',
                 type: 'select',
                 default: (string) array_key_first($locales),
-                rules: ['required', 'string', 'in:' . implode(',', array_keys($locales))],
+                rules: ['required', 'string', 'in:'.implode(',', array_keys($locales))],
                 options: $locales,
             ),
         ];

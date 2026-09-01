@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Console\Commands;
 
-use Simtabi\Laranail\Installer\Headless\Support\EnvWriter;
 use Simtabi\Laranail\Installer\Headless\Console\Commands\Concerns\GuardsInstallerAccess;
+use Simtabi\Laranail\Installer\Headless\Support\EnvWriter;
 
 /**
  * Updates a single key in the .env file (format-preserving, atomic), via the

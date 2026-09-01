@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Event;
-use Simtabi\Laranail\Installer\Headless\Steps\ChoiceStep;
 use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
+use Simtabi\Laranail\Installer\Headless\Steps\ChoiceStep;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 
 beforeEach(function (): void {
     $this->state = new InstallationState;

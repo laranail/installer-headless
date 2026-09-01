@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
-use Throwable;
-use Simtabi\Laranail\Installer\Headless\Support\EnvWriter;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\EnvWriter;
 use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Support\PostInstallCleanup;
+use Throwable;
 
 /**
  * Finalizes installation: runs conservative post-install cleanup, sets the install

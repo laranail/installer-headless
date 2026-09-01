@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
+use Simtabi\Laranail\Installer\Headless\Facades\Installer;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\InstallerManager;
-use Simtabi\Laranail\Installer\Headless\Facades\Installer;
-use Simtabi\Laranail\Installer\Headless\Steps\WelcomeStep;
 use Simtabi\Laranail\Installer\Headless\Steps\AbstractStep;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Steps\WelcomeStep;
 use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 
 class DslFakeStep extends AbstractStep
 {

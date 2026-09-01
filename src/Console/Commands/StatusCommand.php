@@ -26,7 +26,7 @@ final class StatusCommand extends Command
         $this->table(['Check', 'Value'], $rows);
 
         $completed = $state->completedSteps();
-        $this->line('Completed steps: ' . ($completed === [] ? '(none)' : implode(', ', $completed)));
+        $this->line('Completed steps: '.($completed === [] ? '(none)' : implode(', ', $completed)));
 
         return self::SUCCESS;
     }

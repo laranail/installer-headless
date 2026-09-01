@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Notification;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
-use Simtabi\Laranail\Installer\Headless\Facades\Installer;
-use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
-use Simtabi\Laranail\Installer\Headless\Notifications\InstallationFailed;
 use Simtabi\Laranail\Installer\Headless\Events\UnauthorizedInstallerAccess;
+use Simtabi\Laranail\Installer\Headless\Facades\Installer;
 use Simtabi\Laranail\Installer\Headless\Notifications\InstallationCompleted;
+use Simtabi\Laranail\Installer\Headless\Notifications\InstallationFailed;
 use Simtabi\Laranail\Installer\Headless\Notifications\UnauthorizedAccessAlert;
+use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 it('registers extra user-form fields through the Installer::userFields DSL', function (): void {
     Installer::userFields(fn (?string $role, array $ctx): array => [

@@ -19,9 +19,9 @@ final class InstallerContext
     private ?InstallationState $state = null;
 
     /**
-     * @param array<string, mixed> $input
-     * @param array<string, mixed> $options
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $input
+     * @param  array<string, mixed>  $options
+     * @param  array<string, mixed>  $data
      */
     public function __construct(
         private array $input = [],
@@ -30,7 +30,7 @@ final class InstallerContext
     ) {}
 
     /**
-     * @param array<string, mixed> $input
+     * @param  array<string, mixed>  $input
      */
     public static function fromInput(array $input, array $options = []): self
     {
@@ -60,7 +60,7 @@ final class InstallerContext
     /**
      * Replace the whole input set (used after per-step transform stages run).
      *
-     * @param array<string, mixed> $input
+     * @param  array<string, mixed>  $input
      */
     public function replaceInput(array $input): self
     {
