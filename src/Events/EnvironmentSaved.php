@@ -14,7 +14,7 @@ final readonly class EnvironmentSaved
     use Dispatchable;
 
     /**
-     * @param  array<string, string>  $values  the keys written (secrets already masked by the caller)
+     * @param array<string, string> $values the keys written (secrets already masked by the caller)
      */
     public function __construct(public array $values = []) {}
 }

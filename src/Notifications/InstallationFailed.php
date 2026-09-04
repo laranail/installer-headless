@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Notifications;
 
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 use Simtabi\Laranail\Installer\Headless\Notifications\Concerns\RoutesViaConfiguredChannels;
 
 /**
@@ -22,7 +22,7 @@ final class InstallationFailed extends Notification
     {
         return (new MailMessage)
             ->error()
-            ->subject('Installation failed — '.config('app.name', 'Application'))
+            ->subject('Installation failed — ' . config('app.name', 'Application'))
             ->greeting('Installation failed')
             ->line("The installer failed during the [{$this->step}] step.")
             ->line($this->reason);

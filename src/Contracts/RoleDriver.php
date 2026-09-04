@@ -12,7 +12,7 @@ namespace Simtabi\Laranail\Installer\Headless\Contracts;
 interface RoleDriver
 {
     /**
-     * @param  object  $user  the created user model instance
+     * @param object $user the created user model instance
      */
     public function assign(object $user, string $role): void;
 }

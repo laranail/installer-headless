@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Users;
 
-use Illuminate\Database\Eloquent\Model;
+use Throwable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Model;
 use Simtabi\Laranail\Installer\Headless\Events\UserCreated;
 use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
-use Throwable;
 
 /**
  * Creates the first user account.
@@ -55,7 +55,8 @@ final readonly class UserAccountCreator
      * Create many users (bulk import). Each reuses the full creation lifecycle
      * (preparing/creating/role hooks + role resolution) and is idempotent by email.
      *
-     * @param  iterable<UserData>  $users
+     * @param iterable<UserData> $users
+     *
      * @return list<object>
      */
     public function createMany(iterable $users): array
@@ -162,7 +163,7 @@ final readonly class UserAccountCreator
         $attributes = $this->hooks->runPreparing(array_merge(
             $this->nameAttributes($data, $fields),
             [
-                $emailColumn => $data->email,
+                $emailColumn    => $data->email,
                 $passwordColumn => Hash::make($data->password),
             ],
             (array) config('installer.user.attributes', []),
@@ -180,7 +181,8 @@ final readonly class UserAccountCreator
      * The name column(s) to write, per `installer.user.name_shape`: a single `name`
      * column, or separate `first_name`/`last_name` columns.
      *
-     * @param  array<string, mixed>  $fields
+     * @param array<string, mixed> $fields
+     *
      * @return array<string, mixed>
      */
     private function nameAttributes(UserData $data, array $fields): array
@@ -188,7 +190,7 @@ final readonly class UserAccountCreator
         if ((string) config('installer.user.name_shape', 'single') === 'split') {
             return [
                 (string) ($fields['first_name'] ?? 'first_name') => $data->firstName ?? '',
-                (string) ($fields['last_name'] ?? 'last_name') => $data->lastName ?? '',
+                (string) ($fields['last_name'] ?? 'last_name')   => $data->lastName ?? '',
             ];
         }
 

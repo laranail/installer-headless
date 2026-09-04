@@ -10,7 +10,7 @@ it('reports the default test connection as live', function (): void {
 
 it('succeeds testing an in-memory sqlite connection', function (): void {
     $result = (new DatabaseConnection)->test([
-        'driver' => 'sqlite',
+        'driver'   => 'sqlite',
         'database' => ':memory:',
     ]);
 

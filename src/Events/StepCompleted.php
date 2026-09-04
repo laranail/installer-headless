@@ -14,7 +14,7 @@ final readonly class StepCompleted
     use Dispatchable;
 
     /**
-     * @param  array<string, mixed>  $context  non-sensitive result data
+     * @param array<string, mixed> $context non-sensitive result data
      */
     public function __construct(public string $step, public array $context = []) {}
 }

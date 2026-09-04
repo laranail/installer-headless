@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
 beforeEach(function (): void {
-    $this->dir = sys_get_temp_dir().'/installer-cli-'.uniqid();
+    $this->dir = sys_get_temp_dir() . '/installer-cli-' . uniqid();
     mkdir($this->dir, 0755, true);
-    config()->set('installer.env.path', $this->dir.'/.env');
-    config()->set('installer.env.example', $this->dir.'/.env.example');
-    file_put_contents($this->dir.'/.env.example', "APP_NAME=Example\nDB_CONNECTION=sqlite\n");
+    config()->set('installer.env.path', $this->dir . '/.env');
+    config()->set('installer.env.example', $this->dir . '/.env.example');
+    file_put_contents($this->dir . '/.env.example', "APP_NAME=Example\nDB_CONNECTION=sqlite\n");
     app(InstallationState::class)->clear();
 });
 
@@ -21,7 +21,7 @@ afterEach(function (): void {
     foreach (['addon', 'a', 'b'] as $product) {
         app(InstallationState::class)->forProduct($product)->clear();
     }
-    foreach (array_merge(glob($this->dir.'/*') ?: [], glob($this->dir.'/.*') ?: []) as $path) {
+    foreach (array_merge(glob($this->dir . '/*') ?: [], glob($this->dir . '/.*') ?: []) as $path) {
         if (is_file($path)) {
             @unlink($path);
         }
@@ -42,11 +42,11 @@ it('resets installer state', function (): void {
 });
 
 it('updates a single .env key (format-preserving)', function (): void {
-    file_put_contents($this->dir.'/.env', "# comment\nAPP_NAME=Old\n");
+    file_put_contents($this->dir . '/.env', "# comment\nAPP_NAME=Old\n");
 
     $this->artisan('laranail::installer.env', ['key' => 'APP_NAME', 'value' => 'New'])->assertExitCode(0);
 
-    $env = file_get_contents($this->dir.'/.env');
+    $env = file_get_contents($this->dir . '/.env');
     expect($env)->toContain('# comment')->and($env)->toContain('APP_NAME=New');
 });
 
@@ -55,17 +55,17 @@ it('provisions the app headlessly from flags', function (): void {
     config()->set('installer.requirements.apache', []);
     config()->set('installer.user.model', User::class);
     config()->set('installer.user.role_driver', 'eloquent');
-    $this->app['migrator']->path(__DIR__.'/../Fixtures/migrations');
+    $this->app['migrator']->path(__DIR__ . '/../Fixtures/migrations');
 
-    $dbFile = $this->dir.'/db.sqlite';
+    $dbFile = $this->dir . '/db.sqlite';
 
     $this->artisan('laranail::installer.install', [
-        '--db-driver' => 'sqlite',
-        '--db-name' => $dbFile,
-        '--app-name' => 'CLI App',
-        '--app-url' => 'http://cli.test',
-        '--user-name' => 'Ada',
-        '--user-email' => 'ada@example.com',
+        '--db-driver'     => 'sqlite',
+        '--db-name'       => $dbFile,
+        '--app-name'      => 'CLI App',
+        '--app-url'       => 'http://cli.test',
+        '--user-name'     => 'Ada',
+        '--user-email'    => 'ada@example.com',
         '--user-password' => 'secret-pass',
     ])->assertExitCode(0);
 

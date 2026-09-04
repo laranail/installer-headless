@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Illuminate\Support\Traits\Macroable;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
 use Simtabi\Laranail\Installer\Headless\Support\StepFieldHooks;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * Base step that resolves enabled/priority from `installer.steps.<key>` config
@@ -60,7 +60,8 @@ abstract class AbstractStep implements Step
     /**
      * Rules for the currently-visible fields. Hidden fields contribute none.
      *
-     * @param  array<string, mixed>  $input
+     * @param array<string, mixed> $input
+     *
      * @return array<string, mixed>
      */
     public function rules(array $input = []): array

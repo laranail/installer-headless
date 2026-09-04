@@ -6,8 +6,8 @@ namespace Simtabi\Laranail\Installer\Headless\Security;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\IpUtils;
 
 /**
@@ -147,11 +147,11 @@ final class InstallerAccessPolicy
         }
 
         return match (true) {
-            ! $this->httpsOk($secure) => 'https',
+            ! $this->httpsOk($secure)   => 'https',
             ! $this->hostAllowed($host) => 'host',
-            ! $this->ipAllowed($ip) => 'ip',
-            ! $this->withinWindow() => 'window',
-            default => null,
+            ! $this->ipAllowed($ip)     => 'ip',
+            ! $this->withinWindow()     => 'window',
+            default                     => null,
         };
     }
 

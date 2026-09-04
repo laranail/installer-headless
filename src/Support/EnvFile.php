@@ -20,7 +20,7 @@ use Stringable;
 final class EnvFile implements Stringable
 {
     /**
-     * @param  list<array<string, string>>  $lines
+     * @param list<array<string, string>> $lines
      */
     private function __construct(
         /**
@@ -108,10 +108,10 @@ final class EnvFile implements Stringable
         }
 
         $this->lines[] = [
-            'type' => 'entry',
-            'key' => $key,
-            'prefix' => $key.'=',
-            'value' => $encoded,
+            'type'   => 'entry',
+            'key'    => $key,
+            'prefix' => $key . '=',
+            'value'  => $encoded,
             'suffix' => '',
         ];
 
@@ -121,7 +121,7 @@ final class EnvFile implements Stringable
     /**
      * Bulk set. Order of insertion follows the array for new keys.
      *
-     * @param  array<string, string>  $values
+     * @param array<string, string> $values
      */
     public function setMany(array $values): self
     {
@@ -148,7 +148,7 @@ final class EnvFile implements Stringable
 
         foreach ($this->lines as $line) {
             $out[] = ($line['type'] ?? '') === 'entry'
-                ? $line['prefix'].$line['value'].$line['suffix']
+                ? $line['prefix'] . $line['value'] . $line['suffix']
                 : $line['text'];
         }
 
@@ -173,10 +173,10 @@ final class EnvFile implements Stringable
             $key = self::keyFromPrefix($m[1]);
 
             return [
-                'type' => 'entry',
-                'key' => $key,
+                'type'   => 'entry',
+                'key'    => $key,
                 'prefix' => $m[1],
-                'value' => $m[2],
+                'value'  => $m[2],
                 'suffix' => '',
             ];
         }
@@ -212,10 +212,10 @@ final class EnvFile implements Stringable
 
             if ($first === '"') {
                 return strtr($inner, [
-                    '\\n' => "\n",
-                    '\\r' => "\r",
-                    '\\t' => "\t",
-                    '\\"' => '"',
+                    '\\n'  => "\n",
+                    '\\r'  => "\r",
+                    '\\t'  => "\t",
+                    '\\"'  => '"',
                     '\\\\' => '\\',
                 ]);
             }
@@ -242,12 +242,12 @@ final class EnvFile implements Stringable
 
         $escaped = strtr($value, [
             '\\' => '\\\\',
-            '"' => '\\"',
+            '"'  => '\\"',
             "\n" => '\\n',
             "\r" => '\\r',
             "\t" => '\\t',
         ]);
 
-        return '"'.$escaped.'"';
+        return '"' . $escaped . '"';
     }
 }

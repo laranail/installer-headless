@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Support\MigrationRunner;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 
 /**
  * Runs database migrations and the optional configured seeder.
