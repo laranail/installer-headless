@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Users;
 
-use Illuminate\Support\Manager;
 use Override;
+use Illuminate\Support\Manager;
+use Spatie\Permission\PermissionRegistrar;
 use Simtabi\Laranail\Installer\Headless\Contracts\RoleDriver;
 use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
-use Simtabi\Laranail\Installer\Headless\Users\RoleDrivers\EloquentRoleDriver;
 use Simtabi\Laranail\Installer\Headless\Users\RoleDrivers\NullRoleDriver;
 use Simtabi\Laranail\Installer\Headless\Users\RoleDrivers\SpatieRoleDriver;
-use Spatie\Permission\PermissionRegistrar;
+use Simtabi\Laranail\Installer\Headless\Users\RoleDrivers\EloquentRoleDriver;
 
 /**
  * Driver manager for role assignment. The default is `installer.user.role_driver`
@@ -38,7 +38,7 @@ class RoleManager extends Manager
         $driver = $this->driver();
 
         if (! $driver instanceof RoleDriver) {
-            throw new InstallerException('The resolved role driver must implement '.RoleDriver::class.'.');
+            throw new InstallerException('The resolved role driver must implement ' . RoleDriver::class . '.');
         }
 
         return $driver;
@@ -63,7 +63,7 @@ class RoleManager extends Manager
      * Support a custom RoleDriver FQCN as the driver name (falls back to the
      * built-in create*Driver methods / registered extensions for plain keys).
      *
-     * @param  string  $driver
+     * @param string $driver
      */
     #[Override]
     protected function createDriver($driver): mixed
@@ -72,7 +72,7 @@ class RoleManager extends Manager
             $instance = $this->container->make($driver);
 
             if (! $instance instanceof RoleDriver) {
-                throw new InstallerException("Configured role driver [{$driver}] must implement ".RoleDriver::class.'.');
+                throw new InstallerException("Configured role driver [{$driver}] must implement " . RoleDriver::class . '.');
             }
 
             return $instance;

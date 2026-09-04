@@ -26,10 +26,10 @@ it('reports apache modules as null on a non-apache SAPI', function (): void {
 
 it('aggregates a blocking result from required pieces only', function (): void {
     config()->set('installer.requirements', [
-        'php' => '8.0.0',
-        'extensions' => ['json'],
-        'optional' => ['definitely_not_an_extension'],
-        'apache' => [],
+        'php'         => '8.0.0',
+        'extensions'  => ['json'],
+        'optional'    => ['definitely_not_an_extension'],
+        'apache'      => [],
         'permissions' => [],
     ]);
 

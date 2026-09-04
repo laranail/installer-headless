@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Users\RoleDrivers;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Model;
 use Simtabi\Laranail\Installer\Headless\Contracts\RoleDriver;
 
 /**

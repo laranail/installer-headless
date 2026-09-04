@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\Steps\AbstractStep;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Installer\Headless\Support\ProductPipeline;
 use Simtabi\Laranail\Installer\Headless\Support\ProductRegistry;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
 /** Captures what a step sees, to assert product context/overlay reach it. */
 final class RecordingProductStep extends AbstractStep
@@ -27,7 +27,7 @@ final class RecordingProductStep extends AbstractStep
     public function run(InstallerContext $context): void
     {
         self::$seen = [
-            'product' => $context->product()?->slug,
+            'product'        => $context->product()?->slug,
             'context_seeder' => $context->productConfig('database.seeder'),
             'overlay_seeder' => config('installer.database.seeder'),
         ];
@@ -77,8 +77,8 @@ it('exposes product config to steps via context and the opt-in global overlay (r
     app(StepRegistry::class)->register(new RecordingProductStep);
 
     config()->set('installer.products.cfg', [
-        'steps' => ['recording'],
-        'config' => ['database' => ['seeder' => 'AddonSeeder']],
+        'steps'          => ['recording'],
+        'config'         => ['database' => ['seeder' => 'AddonSeeder']],
         'config_overlay' => true,
     ]);
 

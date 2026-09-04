@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Support;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
-use Simtabi\Laranail\Installer\Headless\Events\EnvironmentSaved;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
-use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
+use Illuminate\Database\Eloquent\Model;
 use Simtabi\Laranail\Installer\Headless\Events\StepFailed;
 use Simtabi\Laranail\Installer\Headless\Events\StepStarted;
-use Simtabi\Laranail\Installer\Headless\Events\UnauthorizedInstallerAccess;
 use Simtabi\Laranail\Installer\Headless\Events\UserCreated;
+use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
+use Simtabi\Laranail\Installer\Headless\Events\EnvironmentSaved;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
+use Simtabi\Laranail\Installer\Headless\Events\UnauthorizedInstallerAccess;
 
 /**
  * Structured, secret-safe logging of installer lifecycle events. Sensitive
@@ -76,25 +76,25 @@ final readonly class InstallerEventLogger
     public function subscribe(): array
     {
         return [
-            InstallerStarted::class => 'handleStarted',
-            StepStarted::class => 'handleStepStarted',
-            StepCompleted::class => 'handleStepCompleted',
-            StepFailed::class => 'handleStepFailed',
-            EnvironmentSaved::class => 'handleEnvironmentSaved',
-            UserCreated::class => 'handleUserCreated',
-            InstallerFailed::class => 'handleFailed',
+            InstallerStarted::class            => 'handleStarted',
+            StepStarted::class                 => 'handleStepStarted',
+            StepCompleted::class               => 'handleStepCompleted',
+            StepFailed::class                  => 'handleStepFailed',
+            EnvironmentSaved::class            => 'handleEnvironmentSaved',
+            UserCreated::class                 => 'handleUserCreated',
+            InstallerFailed::class             => 'handleFailed',
             UnauthorizedInstallerAccess::class => 'handleUnauthorized',
-            InstallerFinished::class => 'handleFinished',
+            InstallerFinished::class           => 'handleFinished',
         ];
     }
 
     /**
-     * @param  array<string, mixed>  $context
+     * @param array<string, mixed> $context
      */
     private function log(string $message, array $context, string $level = 'info'): void
     {
         $channel = config('installer.logging.channel');
 
-        Log::channel(is_string($channel) ? $channel : null)->{$level}('installer: '.$message, $context);
+        Log::channel(is_string($channel) ? $channel : null)->{$level}('installer: ' . $message, $context);
     }
 }

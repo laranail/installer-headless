@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Tests;
 
+use Simtabi\Laranail\Package\Tools\Testing\IsolatedTestCase;
 use Simtabi\Laranail\Console\Providers\ConsoleServiceProvider;
 use Simtabi\Laranail\Installer\Headless\Providers\InstallerServiceProvider;
-use Simtabi\Laranail\Package\Tools\Testing\IsolatedTestCase;
 
 abstract class TestCase extends IsolatedTestCase
 {
@@ -23,12 +23,12 @@ abstract class TestCase extends IsolatedTestCase
     {
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
 
-        $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+        $app['config']->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
         $app['config']->set('cache.default', 'array');
         $app['config']->set('queue.default', 'sync');
     }

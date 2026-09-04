@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
+use Simtabi\Laranail\Installer\Headless\Users\UserData;
+use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Steps\CreateUserStep;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
-use Simtabi\Laranail\Installer\Headless\Users\UserData;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 function freshUsersTable(): void
 {

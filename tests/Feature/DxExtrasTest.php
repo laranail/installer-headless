@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Schema;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
-use Simtabi\Laranail\Installer\Headless\Notifications\InstallationCompleted;
-use Simtabi\Laranail\Installer\Headless\Notifications\InstallationFailed;
-use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
-use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
-use Simtabi\Laranail\Installer\Headless\Users\UserCreationHooks;
 use Simtabi\Laranail\Installer\Headless\Users\UserData;
+use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
+use Simtabi\Laranail\Installer\Headless\Users\UserCreationHooks;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
+use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
+use Simtabi\Laranail\Installer\Headless\Notifications\InstallationFailed;
+use Simtabi\Laranail\Installer\Headless\Notifications\InstallationCompleted;
 
 it('runs the user-creation hooks pipeline', function (): void {
     Schema::create('users', function (Blueprint $table): void {
