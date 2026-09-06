@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Support;
 
-use Illuminate\Notifications\AnonymousNotifiable;
+use Throwable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
+use Simtabi\Laranail\Installer\Headless\Notifications\InstallationFailed;
 use Simtabi\Laranail\Installer\Headless\Events\UnauthorizedInstallerAccess;
 use Simtabi\Laranail\Installer\Headless\Notifications\InstallationCompleted;
-use Simtabi\Laranail\Installer\Headless\Notifications\InstallationFailed;
 use Simtabi\Laranail\Installer\Headless\Notifications\UnauthorizedAccessAlert;
-use Throwable;
 
 /**
  * Sends install completion/failure and security-alert notifications to the
@@ -54,14 +54,14 @@ final class InstallerNotifier
     public function subscribe(): array
     {
         return [
-            InstallerFinished::class => 'handleFinished',
-            InstallerFailed::class => 'handleFailed',
+            InstallerFinished::class           => 'handleFinished',
+            InstallerFailed::class             => 'handleFailed',
             UnauthorizedInstallerAccess::class => 'handleUnauthorized',
         ];
     }
 
     /**
-     * @param  array<int, mixed>  $mailTo
+     * @param array<int, mixed> $mailTo
      */
     private function dispatch(object $notification, bool $enabled, array $mailTo): void
     {

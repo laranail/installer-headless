@@ -26,7 +26,8 @@ class StepPipelines
     }
 
     /**
-     * @param  array<string, mixed>  $input
+     * @param array<string, mixed> $input
+     *
      * @return array<string, mixed>
      */
     public function process(string $step, array $input): array

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Support;
 
+use Throwable;
 use Illuminate\Support\Facades\Artisan;
 use Simtabi\Laranail\Installer\Headless\Exceptions\InstallerException;
-use Throwable;
 
 /**
  * Runs database migrations (and an optional seeder) for the installer. Wraps
@@ -15,7 +15,7 @@ use Throwable;
 final class MigrationRunner
 {
     /**
-     * @param  string|null  $seeder  optional seeder class name; null skips seeding
+     * @param string|null $seeder optional seeder class name; null skips seeding
      */
     public function run(?string $seeder = null): void
     {
@@ -27,7 +27,7 @@ final class MigrationRunner
     }
 
     /**
-     * @param  array<string, mixed>  $parameters
+     * @param array<string, mixed> $parameters
      */
     private function call(string $command, array $parameters): void
     {
@@ -38,7 +38,7 @@ final class MigrationRunner
         }
 
         if ($exitCode !== 0) {
-            throw new InstallerException("Command `{$command}` exited with code {$exitCode}. ".trim(Artisan::output()));
+            throw new InstallerException("Command `{$command}` exited with code {$exitCode}. " . trim(Artisan::output()));
         }
     }
 }

@@ -24,7 +24,7 @@ enum InstallType: string
     public function defaultSteps(): array
     {
         return match ($this) {
-            self::App => ['welcome', 'requirements', 'environment', 'migrate', 'user', 'license', 'final'],
+            self::App    => ['welcome', 'requirements', 'environment', 'migrate', 'user', 'license', 'final'],
             self::Module => ['requirements', 'migrate', 'license', 'final'],
             self::Plugin => ['requirements', 'license', 'final'],
         };

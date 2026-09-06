@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Testing;
 
 use Illuminate\Support\Facades\Event;
-use Simtabi\Laranail\Installer\Headless\Events\EnvironmentSaved;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
-use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
-use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
 use Simtabi\Laranail\Installer\Headless\Events\StepFailed;
 use Simtabi\Laranail\Installer\Headless\Events\StepStarted;
-use Simtabi\Laranail\Installer\Headless\Events\UnauthorizedInstallerAccess;
 use Simtabi\Laranail\Installer\Headless\Events\UserCreated;
+use Simtabi\Laranail\Installer\Headless\Events\StepCompleted;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
+use Simtabi\Laranail\Installer\Headless\Events\EnvironmentSaved;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
+use Simtabi\Laranail\Installer\Headless\Events\InstallerFinished;
+use Simtabi\Laranail\Installer\Headless\Events\UnauthorizedInstallerAccess;
 
 /**
  * Test double returned by InstallerManager::fake(). Built on Event::fake() over the

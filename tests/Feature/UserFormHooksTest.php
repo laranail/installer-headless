@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
 use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 it('adds config-driven flat extra fields to the admin form', function (): void {
     config()->set('installer.user.form_fields', [
@@ -19,8 +19,8 @@ it('adds config-driven flat extra fields to the admin form', function (): void {
 
 it('resolves role-keyed config fields (role + common), skipping other roles', function (): void {
     config()->set('installer.user.form_fields', [
-        '*' => [['name' => 'phone', 'label' => 'Phone']],
-        'admin' => [['name' => 'department', 'label' => 'Department']],
+        '*'      => [['name' => 'phone', 'label' => 'Phone']],
+        'admin'  => [['name' => 'department', 'label' => 'Department']],
         'editor' => [['name' => 'bio', 'label' => 'Bio']],
     ]);
 

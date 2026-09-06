@@ -59,7 +59,8 @@ final class UserCreationHooks
     }
 
     /**
-     * @param  array<string, mixed>  $attributes
+     * @param array<string, mixed> $attributes
+     *
      * @return array<string, mixed>
      */
     public function runPreparing(array $attributes, UserData $data): array

@@ -39,7 +39,8 @@ final class SensitiveFieldDetector
     /**
      * Return a copy of the array with sensitive values masked.
      *
-     * @param  array<string, mixed>  $values
+     * @param array<string, mixed> $values
+     *
      * @return array<string, mixed>
      */
     public function mask(array $values): array

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Notifications;
 
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 use Simtabi\Laranail\Installer\Headless\Notifications\Concerns\RoutesViaConfiguredChannels;
 
 /**
@@ -28,11 +28,11 @@ final class UnauthorizedAccessAlert extends Notification
     {
         return (new MailMessage)
             ->error()
-            ->subject('Installer access denied — '.config('app.name', 'Application'))
+            ->subject('Installer access denied — ' . config('app.name', 'Application'))
             ->greeting('Unauthorized installer access')
             ->line("A request to the installer was blocked (reason: {$this->reason}).")
-            ->line('Source IP: '.($this->ip ?? 'unknown'))
-            ->line('Path: '.($this->path !== '' ? $this->path : 'n/a'));
+            ->line('Source IP: ' . ($this->ip ?? 'unknown'))
+            ->line('Path: ' . ($this->path !== '' ? $this->path : 'n/a'));
     }
 
     /**

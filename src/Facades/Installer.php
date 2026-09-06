@@ -6,11 +6,11 @@ namespace Simtabi\Laranail\Installer\Headless\Facades;
 
 use Closure;
 use Illuminate\Support\Facades\Facade;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Contracts\Step;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\InstallerManager;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * @method static StepRegistry steps()

@@ -23,13 +23,14 @@ final class RequirementsChecker
 
         return [
             'required' => $minimum,
-            'current' => PHP_VERSION,
-            'passes' => version_compare(PHP_VERSION, $minimum, '>='),
+            'current'  => PHP_VERSION,
+            'passes'   => version_compare(PHP_VERSION, $minimum, '>='),
         ];
     }
 
     /**
-     * @param  list<string>  $extensions
+     * @param list<string> $extensions
+     *
      * @return array<string, bool>
      */
     public function checkExtensions(array $extensions): array
@@ -44,7 +45,8 @@ final class RequirementsChecker
     }
 
     /**
-     * @param  list<string>  $modules
+     * @param list<string> $modules
+     *
      * @return array<string, bool|null> null = cannot be determined (non-Apache SAPI)
      */
     public function checkApacheModules(array $modules): array
@@ -61,7 +63,8 @@ final class RequirementsChecker
     }
 
     /**
-     * @param  list<string>  $paths  paths relative to base_path()
+     * @param list<string> $paths paths relative to base_path()
+     *
      * @return array<string, bool>
      */
     public function checkPermissions(array $paths): array
@@ -102,24 +105,24 @@ final class RequirementsChecker
 
         return [
             'disable_functions' => [
-                'ok' => true,
-                'detail' => $blocked === [] ? 'none' : implode(', ', $blocked).' disabled (installer does not require them)',
+                'ok'     => true,
+                'detail' => $blocked === [] ? 'none' : implode(', ', $blocked) . ' disabled (installer does not require them)',
             ],
             'max_execution_time' => [
-                'ok' => $time === 0 || $time >= 30,
-                'detail' => $time === 0 ? 'unlimited' : $time.'s (raise it for large migrations/imports)',
+                'ok'     => $time === 0 || $time >= 30,
+                'detail' => $time === 0 ? 'unlimited' : $time . 's (raise it for large migrations/imports)',
             ],
             'memory_limit' => [
-                'ok' => $memory < 0 || $memory >= 128 * 1024 * 1024,
+                'ok'     => $memory < 0 || $memory >= 128 * 1024 * 1024,
                 'detail' => $memoryLimit,
             ],
             'session_driver' => [
-                'ok' => ! $this->dbBacked($session),
-                'detail' => $session.($this->dbBacked($session) ? ' — overridden to file during install' : ''),
+                'ok'     => ! $this->dbBacked($session),
+                'detail' => $session . ($this->dbBacked($session) ? ' — overridden to file during install' : ''),
             ],
             'cache_store' => [
-                'ok' => ! $this->dbBacked($cache),
-                'detail' => $cache.($this->dbBacked($cache) ? ' — overridden to file during install' : ''),
+                'ok'     => ! $this->dbBacked($cache),
+                'detail' => $cache . ($this->dbBacked($cache) ? ' — overridden to file during install' : ''),
             ],
         ];
     }
@@ -155,13 +158,13 @@ final class RequirementsChecker
             && ! in_array(false, $permissions, true);
 
         return [
-            'php' => $php,
-            'extensions' => $extensions,
-            'optional' => $optional,
-            'apache' => $apache,
+            'php'         => $php,
+            'extensions'  => $extensions,
+            'optional'    => $optional,
+            'apache'      => $apache,
             'permissions' => $permissions,
-            'warnings' => $this->warnings(),
-            'passes' => $passes,
+            'warnings'    => $this->warnings(),
+            'passes'      => $passes,
         ];
     }
 
@@ -182,9 +185,9 @@ final class RequirementsChecker
         $number = (int) $value;
 
         return match ($unit) {
-            'g' => $number * 1024 * 1024 * 1024,
-            'm' => $number * 1024 * 1024,
-            'k' => $number * 1024,
+            'g'     => $number * 1024 * 1024 * 1024,
+            'm'     => $number * 1024 * 1024,
+            'k'     => $number * 1024,
             default => $number,
         };
     }

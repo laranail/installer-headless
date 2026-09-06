@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Simtabi\Laranail\Installer\Headless\Steps;
 
 use Override;
+use Simtabi\Laranail\Installer\Headless\Wizard\Field;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
+use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 use Simtabi\Laranail\Installer\Headless\Exceptions\LicenseException;
 use Simtabi\Laranail\Installer\Headless\Licensing\LicenseStepAdapter;
-use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 
 /**
  * License verification step. Off by default; when enabled it delegates activation

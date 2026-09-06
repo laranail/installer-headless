@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Licensing;
 
-use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
-use Simtabi\Laranail\Licence\Verifier\Contracts\Capabilities\SupportsDomainBinding;
-use Simtabi\Laranail\Licence\Verifier\Contracts\Driver;
 use Simtabi\Laranail\Licence\Verifier\LicenseManager;
+use Simtabi\Laranail\Licence\Verifier\Contracts\Driver;
+use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
 use Simtabi\Laranail\Licence\Verifier\ValueObjects\LicenseRequest;
 use Simtabi\Laranail\Licence\Verifier\ValueObjects\VerificationResult;
+use Simtabi\Laranail\Licence\Verifier\Contracts\Capabilities\SupportsDomainBinding;
 
 /**
  * Bridges the installer's license step to laranail/license-verifier.
@@ -35,8 +35,8 @@ final readonly class LicenseStepAdapter
     {
         $request = LicenseRequest::fromArray([
             'license_key' => (string) $context->input('purchase_code', $context->input('license_key', '')),
-            'client' => $context->input('buyer', $context->input('client')),
-            'metadata' => ['domain' => $context->input('app_url')],
+            'client'      => $context->input('buyer', $context->input('client')),
+            'metadata'    => ['domain' => $context->input('app_url')],
         ]);
 
         return $this->manager->activate($request);

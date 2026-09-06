@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Simtabi\Laranail\Installer\Headless\Users\RoleDrivers;
 
-use Simtabi\Laranail\Installer\Headless\Contracts\RoleDriver;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
+use Simtabi\Laranail\Installer\Headless\Contracts\RoleDriver;
 
 /**
  * Assigns a role using spatie/laravel-permission, creating the role for the

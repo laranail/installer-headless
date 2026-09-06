@@ -20,7 +20,8 @@ use Simtabi\Laranail\Installer\Headless\Contracts\Step;
 final class WizardValidator
 {
     /**
-     * @param  array<string, mixed>  $input
+     * @param array<string, mixed> $input
+     *
      * @return array<string, mixed> the validated subset
      *
      * @throws ValidationException
