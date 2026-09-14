@@ -69,8 +69,19 @@ class RoleManager extends Manager
     protected function createDriver($driver): mixed
     {
         if (! isset($this->customCreators[$driver]) && class_exists($driver)) {
+            // Check the type BEFORE building it. `is_a($class, $interface, true)` answers from the
+            // class definition, so a name that is not a RoleDriver is rejected without its
+            // constructor -- or any container binding it would trigger -- ever running. The driver
+            // name arrives from `installer.user.role_driver`, and in a multi-tenant install that
+            // value need not be something a developer hand-wrote.
+            if (! is_a($driver, RoleDriver::class, true)) {
+                throw new InstallerException("Configured role driver [{$driver}] must implement " . RoleDriver::class . '.');
+            }
+
             $instance = $this->container->make($driver);
 
+            // Still checked after construction: the container may be bound to return something else
+            // for this class name entirely.
             if (! $instance instanceof RoleDriver) {
                 throw new InstallerException("Configured role driver [{$driver}] must implement " . RoleDriver::class . '.');
             }
