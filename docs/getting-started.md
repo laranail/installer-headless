@@ -7,7 +7,7 @@ Run your first install through the headless engine's CLI. See the
 
 ```bash
 composer require laranail/installer-headless
-php artisan vendor:publish --tag=installer-config
+php artisan vendor:publish --tag=laranail::installer-headless-config
 ```
 
 See [Installation](installation.md).
