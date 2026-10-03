@@ -20,10 +20,10 @@ The `InstallerServiceProvider` is auto-discovered via package discovery.
 
 ```bash
 # config/installer.php
-php artisan vendor:publish --tag=laranail/installer-headless::config
+php artisan vendor:publish --tag=laranail::installer-headless-config
 
 # translations (44 locales)
-php artisan vendor:publish --tag=laranail/installer-headless::translations
+php artisan vendor:publish --tag=laranail::installer-headless-translations
 ```
 
 ## Optional integrations

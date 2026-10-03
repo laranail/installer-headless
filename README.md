@@ -17,7 +17,7 @@ front end through a small public API.
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Quick start](#quick-start)
+- [Quick start](#quick-start-guide-and-usage)
 - [The step pipeline](#the-step-pipeline)
 - [License verification](#license-verification)
 - [Documentation](#documentation)
@@ -43,10 +43,28 @@ composer require laranail/installer-headless
 The service provider is auto-discovered. Publish the config to customize:
 
 ```bash
-php artisan vendor:publish --tag=laranail/installer-headless::config
+php artisan vendor:publish --tag=laranail::installer-headless-config
 ```
 
-## Quick start
+## Quick start guide and usage
+
+### Getting started
+
+1. Optionally gate the installer behind an access token. Leaving both `INSTALLER_TOKEN` and
+   `INSTALLER_TOKEN_HASH` empty means no gate; `--hash` writes the hashed form to `.env`:
+
+   ```bash
+   php artisan laranail::installer.token --hash
+   ```
+
+2. Confirm the application is not installed yet, since a completed install writes a lock that
+   makes the installer refuse to run again:
+
+   ```bash
+   php artisan laranail::installer.status
+   ```
+
+### Usage
 
 Web wizard: install [`laranail/installer-web`](https://opensource.simtabi.com/installer-web/)
 and visit `/install`.
