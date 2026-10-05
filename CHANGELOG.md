@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   example used `installer-web.index`, which `laranail/installer-web` now serves only as a
   deprecated alias; it now uses `laranail-installer-web.index` and notes the old name still
   resolves with a deprecation notice.
+- `require` now declares every Illuminate component `src/` uses: `illuminate/config`,
+  `illuminate/container`, `illuminate/encryption`, `illuminate/events`, `illuminate/hashing`,
+  `illuminate/log`, `illuminate/notifications`, `illuminate/pipeline` and
+  `illuminate/translation`, plus `laravel/framework ^13.0`, because the global helpers `src/`
+  calls (`config()`, `app()`, `trans()`, `base_path()`, ...) are defined only in
+  `Illuminate/Foundation/helpers.php`. They arrived only transitively before (some through
+  `laranail/package-tools`, the rest only through Testbench), so a consumer on a slimmer stack
+  could install without one. `tests/Unit/DeclaredRequirementsTest.php` scans `src/` and fails on
+  any use the manifest does not declare.
 
 ## [0.1.0] - 2026-07-11
 
