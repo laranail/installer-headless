@@ -79,8 +79,13 @@ With `INSTALLER_SIGNED_LINKS=true`, a valid `temporarySignedRoute` signature gra
 access — hand someone a time-boxed URL:
 
 ```php
-URL::temporarySignedRoute('installer-web.index', now()->addMinutes(60));
+URL::temporarySignedRoute('laranail-installer-web.index', now()->addMinutes(60));
 ```
+
+> The web wizard's routes are named `laranail-installer-web.*`. The bare `installer-web.*` names
+> are deprecated aliases: they still resolve, with an `E_USER_DEPRECATED` notice, and are
+> removable in the next minor after 0.1. `Route::has('installer-web.index')` answers false; ask
+> for the scoped name.
 
 ## Availability window
 

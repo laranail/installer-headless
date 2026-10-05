@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`docs/tools/security.md` signs links with the vendor-scoped route name.** The expiring-link
+  example used `installer-web.index`, which `laranail/installer-web` now serves only as a
+  deprecated alias; it now uses `laranail-installer-web.index` and notes the old name still
+  resolves with a deprecation notice.
+
 ## [0.1.0] - 2026-07-11
 
 ### Fixed
