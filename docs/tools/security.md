@@ -57,7 +57,7 @@ INSTALLER_TRUST_FORWARDED_PROTO=true   # honours X-Forwarded-Proto (spoofable â€
 # Prefer the hash (store the raw token nowhere):
 INSTALLER_TOKEN_HASH="$2y$12$..."
 # or a raw token:
-INSTALLER_TOKEN="a-long-random-secret"
+INSTALLER_TOKEN=changeme   # replace with a long random value
 INSTALLER_TOKEN_SINGLE_USE=true   # invalidate it after a successful install
 ```
 
