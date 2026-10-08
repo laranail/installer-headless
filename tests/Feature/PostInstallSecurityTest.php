@@ -45,15 +45,15 @@ it('invalidates a single-use token in .env when the install finishes', function 
 it('does not touch .env when single-use mode is off', function (): void {
     $dir = sys_get_temp_dir() . '/installer-su2-' . uniqid();
     mkdir($dir, 0755, true);
-    file_put_contents($dir . '/.env', "APP_NAME=Example\nINSTALLER_TOKEN=keep-me\n");
+    file_put_contents($dir . '/.env', "APP_NAME=Example\nINSTALLER_TOKEN=test-secret-not-real\n");
 
     config()->set('installer.env.path', $dir . '/.env');
     config()->set('installer.security.single_use_token', false);
-    config()->set('installer.security.token', 'keep-me');
+    config()->set('installer.security.token', 'test-secret-not-real');
 
     app(FinalStep::class)->run(InstallerContext::fromInput([]));
 
-    expect((string) file_get_contents($dir . '/.env'))->toContain('INSTALLER_TOKEN=keep-me');
+    expect((string) file_get_contents($dir . '/.env'))->toContain('INSTALLER_TOKEN=test-secret-not-real');
 
     @unlink($dir . '/.env');
     @rmdir($dir);
