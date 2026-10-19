@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Event;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\Events\StepFailed;
 use Simtabi\Laranail\Installer\Headless\Events\UserCreated;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerStarted;
@@ -24,7 +25,7 @@ beforeEach(function (): void {
     config()->set('installer.requirements.permissions', []);
     config()->set('installer.requirements.apache', []);
     config()->set('installer.user.model', User::class);
-    config()->set('installer.user.fields', ['name' => 'name', 'email' => 'email', 'password' => 'password']);
+    config()->set('installer.user.fields', ['name' => 'name', 'email' => 'email', 'password' => 'password']); // @credential-literal-exempt: a field-to-column mapping, not a credential
     config()->set('installer.user.role_driver', 'eloquent');
     config()->set('installer.user.role', 'admin');
 
@@ -40,8 +41,8 @@ beforeEach(function (): void {
         'database_name'         => $this->dir . '/db.sqlite',
         'name'                  => 'Ada Lovelace',
         'email'                 => 'ada@example.com',
-        'password'              => 'secret-pass',
-        'password_confirmation' => 'secret-pass',
+        'password'              => TestCredentials::password('user'),
+        'password_confirmation' => TestCredentials::password('user'),
     ]);
 });
 

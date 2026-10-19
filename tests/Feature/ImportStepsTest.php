@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Steps\ImportUsersStep;
 use Simtabi\Laranail\Installer\Headless\Steps\ImportDatabaseStep;
@@ -44,7 +45,8 @@ it('registers both import steps disabled (config-toggleable)', function (): void
 it('imports users from a CSV file', function (): void {
     importUsersTable();
     $csv = sys_get_temp_dir() . '/users-' . uniqid() . '.csv';
-    file_put_contents($csv, "name,email,password,role\nAda,ada@x.test,secret-pass,admin\nBo,bo@x.test,secret-pass,member\n");
+    $password = TestCredentials::password('user');
+    file_put_contents($csv, "name,email,password,role\nAda,ada@x.test,{$password},admin\nBo,bo@x.test,{$password},member\n");
     config()->set('installer.users.import.path', $csv);
 
     (new ImportUsersStep)->run(InstallerContext::fromInput([]));
@@ -58,7 +60,7 @@ it('imports users from a CSV file', function (): void {
 it('imports users from an inline rows array', function (): void {
     importUsersTable();
     config()->set('installer.users.import.rows', [
-        ['name' => 'Cy', 'email' => 'cy@x.test', 'password' => 'secret-pass', 'role' => 'member'],
+        ['name' => 'Cy', 'email' => 'cy@x.test', 'password' => TestCredentials::password('user'), 'role' => 'member'],
     ]);
 
     (new ImportUsersStep)->run(InstallerContext::fromInput([]));

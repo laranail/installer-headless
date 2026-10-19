@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Simtabi\Laranail\Installer\Headless\Users\UserData;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
 
@@ -20,25 +21,25 @@ beforeEach(function (): void {
     });
 
     config()->set('installer.user.model', User::class);
-    config()->set('installer.user.fields', ['name' => 'name', 'email' => 'email', 'password' => 'password']);
+    config()->set('installer.user.fields', ['name' => 'name', 'email' => 'email', 'password' => 'password']); // @credential-literal-exempt: a field-to-column mapping, not a credential
     config()->set('installer.user.role_driver', 'eloquent');
     config()->set('installer.user.role', 'admin');
 });
 
 it('creates a user via the field map with a hashed password and role', function (): void {
-    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@example.com', 'secret-pass'));
+    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('user')));
 
     expect($user->email)->toBe('ada@example.com')
         ->and($user->role)->toBe('admin')
-        ->and(Hash::check('secret-pass', $user->password))->toBeTrue()
+        ->and(Hash::check(TestCredentials::password('user'), $user->password))->toBeTrue()
         ->and(User::query()->count())->toBe(1);
 });
 
 it('is idempotent for the same email (never duplicates or truncates)', function (): void {
     $creator = new UserAccountCreator;
 
-    $creator->create(new UserData('Ada', 'ada@example.com', 'secret-pass'));
-    $creator->create(new UserData('Ada Again', 'ada@example.com', 'secret-pass'));
+    $creator->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('user')));
+    $creator->create(new UserData('Ada Again', 'ada@example.com', TestCredentials::password('user')));
 
     expect(User::query()->count())->toBe(1);
 });

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Validation\ValidationException;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Steps\EnvironmentStep;
 use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
@@ -51,7 +52,7 @@ it('exposes navigation and progress', function (): void {
 it('persists non-sensitive input but drops secrets by default', function (): void {
     $state = app(InstallationState::class);
 
-    $state->rememberInput('environment', ['app_name' => 'Acme', 'database_password' => 'super-secret']);
+    $state->rememberInput('environment', ['app_name' => 'Acme', 'database_password' => TestCredentials::password('database')]);
 
     expect($state->recallInput('environment'))
         ->toHaveKey('app_name')
@@ -62,16 +63,16 @@ it('persists secrets encrypted when enabled', function (): void {
     config()->set('installer.wizard.persist_secrets', true);
     $state = app(InstallationState::class);
 
-    $state->rememberInput('environment', ['app_name' => 'Acme', 'database_password' => 'super-secret']);
+    $state->rememberInput('environment', ['app_name' => 'Acme', 'database_password' => TestCredentials::password('database')]);
 
     expect($state->recallInput('environment'))->toMatchArray([
         'app_name'          => 'Acme',
-        'database_password' => 'super-secret',
+        'database_password' => TestCredentials::password('database'),
     ]);
 
     // raw state file must not contain the plaintext secret.
     $file = storage_path('installer.state.json');
-    expect(file_get_contents($file))->not->toContain('super-secret');
+    expect(file_get_contents($file))->not->toContain(TestCredentials::password('database'));
 });
 
 it('re-hydrates values over defaults', function (): void {

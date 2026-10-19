@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Users\UserFormHooks;
 
 it('adds config-driven flat extra fields to the admin form', function (): void {
@@ -55,7 +56,7 @@ it('exposes the extra fields through the admin step and validates them via the s
     ]);
 
     $engine = app(InstallerEngine::class);
-    $rules = $engine->rules('user', ['name' => 'A', 'email' => 'a@b.c', 'password' => 'secret12', 'password_confirmation' => 'secret12']);
+    $rules = $engine->rules('user', ['name' => 'A', 'email' => 'a@b.c', 'password' => TestCredentials::password('user'), 'password_confirmation' => TestCredentials::password('user')]);
 
     expect($rules)->toHaveKey('company')
         ->and($rules['company'])->toBe(['required', 'string', 'max:50']);

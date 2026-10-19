@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Support\InstallationState;
 
@@ -66,7 +67,7 @@ it('provisions the app headlessly from flags', function (): void {
         '--app-url'       => 'http://cli.test',
         '--user-name'     => 'Ada',
         '--user-email'    => 'ada@example.com',
-        '--user-password' => 'secret-pass',
+        '--user-password' => TestCredentials::password('user'),
     ])->assertExitCode(0);
 
     expect(app(InstallationState::class)->isInstalled())->toBeTrue()
