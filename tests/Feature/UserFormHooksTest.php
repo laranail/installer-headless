@@ -56,7 +56,7 @@ it('exposes the extra fields through the admin step and validates them via the s
     ]);
 
     $engine = app(InstallerEngine::class);
-    $rules = $engine->rules('user', ['name' => 'A', 'email' => 'a@b.c', 'password' => TestCredentials::password('installer-user'), 'password_confirmation' => TestCredentials::password('installer-user')]);
+    $rules = $engine->rules('user', ['name' => 'A', 'email' => 'a@b.c', 'password' => TestCredentials::password('user'), 'password_confirmation' => TestCredentials::password('user')]);
 
     expect($rules)->toHaveKey('company')
         ->and($rules['company'])->toBe(['required', 'string', 'max:50']);

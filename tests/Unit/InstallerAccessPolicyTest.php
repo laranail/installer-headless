@@ -58,25 +58,25 @@ it('allows IPs by exact and CIDR match, all when empty, loopback off-prod', func
 });
 
 it('validates a raw token with constant-time comparison', function (): void {
-    config()->set('installer.security.token', TestCredentials::secret('installer-token'));
+    config()->set('installer.security.token', TestCredentials::secret('installer'));
 
-    expect(TestCredentials::secret('wrong-installer-token'))->not->toBe(TestCredentials::secret('installer-token'));
+    expect(TestCredentials::secret('wrong'))->not->toBe(TestCredentials::secret('installer'));
 
     expect($this->policy->tokenConfigured())->toBeTrue()
-        ->and($this->policy->tokenValid(TestCredentials::secret('installer-token')))->toBeTrue()
-        ->and($this->policy->tokenValid(TestCredentials::secret('wrong-installer-token')))->toBeFalse()
+        ->and($this->policy->tokenValid(TestCredentials::secret('installer')))->toBeTrue()
+        ->and($this->policy->tokenValid(TestCredentials::secret('wrong')))->toBeFalse()
         ->and($this->policy->tokenValid(null))->toBeFalse()
         ->and($this->policy->tokenValid(''))->toBeFalse();
 });
 
 it('validates a hashed token, preferring the hash over the raw', function (): void {
-    config()->set('installer.security.token', TestCredentials::secret('raw-installer-token'));
-    config()->set('installer.security.token_hash', Hash::make(TestCredentials::secret('hashed-installer-token')));
+    config()->set('installer.security.token', TestCredentials::secret('raw'));
+    config()->set('installer.security.token_hash', Hash::make(TestCredentials::secret('hashed')));
 
-    expect(TestCredentials::secret('raw-installer-token'))->not->toBe(TestCredentials::secret('hashed-installer-token'));
+    expect(TestCredentials::secret('raw'))->not->toBe(TestCredentials::secret('hashed'));
 
-    expect($this->policy->tokenValid(TestCredentials::secret('hashed-installer-token')))->toBeTrue()
-        ->and($this->policy->tokenValid(TestCredentials::secret('raw-installer-token')))->toBeFalse();
+    expect($this->policy->tokenValid(TestCredentials::secret('hashed')))->toBeTrue()
+        ->and($this->policy->tokenValid(TestCredentials::secret('raw')))->toBeFalse();
 });
 
 it('passes the token check when no gate is configured', function (): void {

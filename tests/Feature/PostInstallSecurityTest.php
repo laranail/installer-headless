@@ -26,18 +26,18 @@ it('purges captured wizard input when the install finishes', function (): void {
 it('invalidates a single-use token in .env when the install finishes', function (): void {
     $dir = sys_get_temp_dir() . '/installer-su-' . uniqid();
     mkdir($dir, 0755, true);
-    file_put_contents($dir . '/.env', "APP_NAME=Example\nINSTALLER_TOKEN=" . TestCredentials::secret('installer-token') . "\n");
+    file_put_contents($dir . '/.env', sprintf("APP_NAME=Example\nINSTALLER_TOKEN=%s\n", TestCredentials::secret('installer')));
 
     config()->set('installer.env.path', $dir . '/.env');
     config()->set('installer.security.single_use_token', true);
-    config()->set('installer.security.token', TestCredentials::secret('installer-token'));
+    config()->set('installer.security.token', TestCredentials::secret('installer'));
 
     app(FinalStep::class)->run(InstallerContext::fromInput([]));
 
     $env = (string) file_get_contents($dir . '/.env');
 
     expect($env)->toContain('INSTALLER_TOKEN=')
-        ->and($env)->not->toContain(TestCredentials::secret('installer-token'));
+        ->and($env)->not->toContain(TestCredentials::secret('installer'));
 
     @unlink($dir . '/.env');
     @rmdir($dir);
@@ -46,26 +46,26 @@ it('invalidates a single-use token in .env when the install finishes', function 
 it('does not touch .env when single-use mode is off', function (): void {
     $dir = sys_get_temp_dir() . '/installer-su2-' . uniqid();
     mkdir($dir, 0755, true);
-    file_put_contents($dir . '/.env', "APP_NAME=Example\nINSTALLER_TOKEN=" . TestCredentials::secret('kept-installer-token') . "\n");
+    file_put_contents($dir . '/.env', sprintf("APP_NAME=Example\nINSTALLER_TOKEN=%s\n", TestCredentials::secret('kept')));
 
     config()->set('installer.env.path', $dir . '/.env');
     config()->set('installer.security.single_use_token', false);
-    config()->set('installer.security.token', TestCredentials::secret('kept-installer-token'));
+    config()->set('installer.security.token', TestCredentials::secret('kept'));
 
     app(FinalStep::class)->run(InstallerContext::fromInput([]));
 
-    expect((string) file_get_contents($dir . '/.env'))->toContain('INSTALLER_TOKEN=' . TestCredentials::secret('kept-installer-token'));
+    expect((string) file_get_contents($dir . '/.env'))->toContain(sprintf('INSTALLER_TOKEN=%s', TestCredentials::secret('kept')));
 
     @unlink($dir . '/.env');
     @rmdir($dir);
 });
 
 it('requires a valid --token for state-changing commands when a token is configured', function (): void {
-    config()->set('installer.security.token', TestCredentials::secret('installer-token'));
+    config()->set('installer.security.token', TestCredentials::secret('installer'));
 
-    expect(TestCredentials::secret('wrong-installer-token'))->not->toBe(TestCredentials::secret('installer-token'));
+    expect(TestCredentials::secret('wrong'))->not->toBe(TestCredentials::secret('installer'));
 
     $this->artisan('laranail::installer.reset')->assertFailed();
-    $this->artisan('laranail::installer.reset', ['--token' => TestCredentials::secret('wrong-installer-token')])->assertFailed();
-    $this->artisan('laranail::installer.reset', ['--token' => TestCredentials::secret('installer-token')])->assertSuccessful();
+    $this->artisan('laranail::installer.reset', ['--token' => TestCredentials::secret('wrong')])->assertFailed();
+    $this->artisan('laranail::installer.reset', ['--token' => TestCredentials::secret('installer')])->assertSuccessful();
 });

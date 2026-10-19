@@ -41,7 +41,7 @@ it('a typed step assigns its role to the created user', function (): void {
     freshUsersTable();
 
     $step = new CreateUserStep(key: 'admin-user', role: 'superadmin');
-    $context = InstallerContext::fromInput(['name' => 'Ada', 'email' => 'ada@x.test', 'password' => TestCredentials::password('installer-user')]);
+    $context = InstallerContext::fromInput(['name' => 'Ada', 'email' => 'ada@x.test', 'password' => TestCredentials::password('user')]);
 
     $step->run($context);
 
@@ -61,9 +61,9 @@ it('createMany() bulk-creates users reusing the lifecycle (idempotent by email)'
     freshUsersTable();
 
     $created = app(UserAccountCreator::class)->createMany([
-        new UserData('Ada', 'ada@x.test', TestCredentials::password('installer-user'), role: 'admin'),
-        new UserData('Bo', 'bo@x.test', TestCredentials::password('installer-user'), role: 'member'),
-        new UserData('Ada Again', 'ada@x.test', TestCredentials::password('installer-user')), // same email → idempotent
+        new UserData('Ada', 'ada@x.test', TestCredentials::password('user'), role: 'admin'),
+        new UserData('Bo', 'bo@x.test', TestCredentials::password('user'), role: 'member'),
+        new UserData('Ada Again', 'ada@x.test', TestCredentials::password('user')), // same email → idempotent
     ]);
 
     expect($created)->toHaveCount(3)

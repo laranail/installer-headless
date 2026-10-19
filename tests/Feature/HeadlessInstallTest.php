@@ -49,8 +49,8 @@ function installContext(string $dbFile): InstallerContext
         'database_name'         => $dbFile,
         'name'                  => 'Ada Lovelace',
         'email'                 => 'ada@example.com',
-        'password'              => TestCredentials::password('installer-user'),
-        'password_confirmation' => TestCredentials::password('installer-user'),
+        'password'              => TestCredentials::password('user'),
+        'password_confirmation' => TestCredentials::password('user'),
     ]);
 }
 

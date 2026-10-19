@@ -35,7 +35,7 @@ it('runs the user-creation hooks pipeline', function (): void {
             $created = $u->email;
         });
 
-    $user = app(UserAccountCreator::class)->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('installer-user')));
+    $user = app(UserAccountCreator::class)->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('user')));
 
     expect($user->role)->toBe('owner')
         ->and($created)->toBe('ada@example.com');

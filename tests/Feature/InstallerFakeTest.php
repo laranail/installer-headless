@@ -35,8 +35,8 @@ beforeEach(function (): void {
         'database_name'         => $this->dir . '/db.sqlite',
         'name'                  => 'Ada Lovelace',
         'email'                 => 'ada@example.com',
-        'password'              => TestCredentials::password('installer-user'),
-        'password_confirmation' => TestCredentials::password('installer-user'),
+        'password'              => TestCredentials::password('user'),
+        'password_confirmation' => TestCredentials::password('user'),
     ]);
 });
 

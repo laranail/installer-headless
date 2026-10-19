@@ -27,19 +27,19 @@ beforeEach(function (): void {
 });
 
 it('creates a user via the field map with a hashed password and role', function (): void {
-    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('installer-user')));
+    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('user')));
 
     expect($user->email)->toBe('ada@example.com')
         ->and($user->role)->toBe('admin')
-        ->and(Hash::check(TestCredentials::password('installer-user'), $user->password))->toBeTrue()
+        ->and(Hash::check(TestCredentials::password('user'), $user->password))->toBeTrue()
         ->and(User::query()->count())->toBe(1);
 });
 
 it('is idempotent for the same email (never duplicates or truncates)', function (): void {
     $creator = new UserAccountCreator;
 
-    $creator->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('installer-user')));
-    $creator->create(new UserData('Ada Again', 'ada@example.com', TestCredentials::password('installer-user')));
+    $creator->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('user')));
+    $creator->create(new UserData('Ada Again', 'ada@example.com', TestCredentials::password('user')));
 
     expect(User::query()->count())->toBe(1);
 });
