@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Users\UserData;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Steps\CreateUserStep;
 use Simtabi\Laranail\Installer\Headless\Support\InstallerContext;
@@ -40,7 +41,7 @@ it('a typed step assigns its role to the created user', function (): void {
     freshUsersTable();
 
     $step = new CreateUserStep(key: 'admin-user', role: 'superadmin');
-    $context = InstallerContext::fromInput(['name' => 'Ada', 'email' => 'ada@x.test', 'password' => 'secret-pass']);
+    $context = InstallerContext::fromInput(['name' => 'Ada', 'email' => 'ada@x.test', 'password' => TestCredentials::password('installer-user')]);
 
     $step->run($context);
 
@@ -60,9 +61,9 @@ it('createMany() bulk-creates users reusing the lifecycle (idempotent by email)'
     freshUsersTable();
 
     $created = app(UserAccountCreator::class)->createMany([
-        new UserData('Ada', 'ada@x.test', 'secret-pass', role: 'admin'),
-        new UserData('Bo', 'bo@x.test', 'secret-pass', role: 'member'),
-        new UserData('Ada Again', 'ada@x.test', 'secret-pass'), // same email → idempotent
+        new UserData('Ada', 'ada@x.test', TestCredentials::password('installer-user'), role: 'admin'),
+        new UserData('Bo', 'bo@x.test', TestCredentials::password('installer-user'), role: 'member'),
+        new UserData('Ada Again', 'ada@x.test', TestCredentials::password('installer-user')), // same email → idempotent
     ]);
 
     expect($created)->toHaveCount(3)

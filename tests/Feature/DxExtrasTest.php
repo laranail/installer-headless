@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Notification;
 use Simtabi\Laranail\Installer\Headless\Users\UserData;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Events\InstallerFailed;
 use Simtabi\Laranail\Installer\Headless\Users\UserCreationHooks;
@@ -34,7 +35,7 @@ it('runs the user-creation hooks pipeline', function (): void {
             $created = $u->email;
         });
 
-    $user = app(UserAccountCreator::class)->create(new UserData('Ada', 'ada@example.com', 'secret-pass'));
+    $user = app(UserAccountCreator::class)->create(new UserData('Ada', 'ada@example.com', TestCredentials::password('installer-user')));
 
     expect($user->role)->toBe('owner')
         ->and($created)->toBe('ada@example.com');

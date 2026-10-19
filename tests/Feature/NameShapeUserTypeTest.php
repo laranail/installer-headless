@@ -8,6 +8,7 @@ use Simtabi\Laranail\Installer\Headless\Wizard\Field;
 use Simtabi\Laranail\Installer\Headless\Users\UserData;
 use Simtabi\Laranail\Installer\Headless\InstallerEngine;
 use Simtabi\Laranail\Installer\Headless\Steps\StepRegistry;
+use Simtabi\Laranail\Package\Tools\Testing\TestCredentials;
 use Simtabi\Laranail\Installer\Headless\Tests\Fixtures\User;
 use Simtabi\Laranail\Installer\Headless\Users\UserAccountCreator;
 
@@ -28,7 +29,7 @@ function makeUsersTable(): void
     config()->set('installer.user.model', User::class);
     config()->set('installer.user.fields', [
         'name'  => 'name', 'first_name' => 'first_name', 'last_name' => 'last_name',
-        'email' => 'email', 'password' => 'password',
+        'email' => 'email', 'password' => 'password', // @credential-literal-exempt: a field-to-column mapping, not a credential
     ]);
 }
 
@@ -58,7 +59,7 @@ it('persists a split name into first_name/last_name columns', function (): void 
     config()->set('installer.user.role_driver', 'null');
 
     $user = (new UserAccountCreator)->create(UserData::fromArray([
-        'first_name' => 'Ada', 'last_name' => 'Lovelace', 'email' => 'ada@x.test', 'password' => 'secret-pass',
+        'first_name' => 'Ada', 'last_name' => 'Lovelace', 'email' => 'ada@x.test', 'password' => TestCredentials::password('installer-user'),
     ]));
 
     expect($user->first_name)->toBe('Ada')->and($user->last_name)->toBe('Lovelace');
@@ -68,7 +69,7 @@ it('assigns no role by default (generic — does not assume admin)', function ()
     makeUsersTable();
     config()->set('installer.user.role_driver', 'eloquent');
 
-    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@x.test', 'secret-pass'));
+    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@x.test', TestCredentials::password('installer-user')));
 
     expect($user->role)->toBeNull();
 });
@@ -78,7 +79,7 @@ it('makes the first user an admin only when opted in', function (): void {
     config()->set('installer.user.role_driver', 'eloquent');
     config()->set('installer.user.first_user_is_admin', true);
 
-    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@x.test', 'secret-pass'));
+    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@x.test', TestCredentials::password('installer-user')));
 
     expect($user->role)->toBe('admin');
 });
@@ -88,7 +89,7 @@ it('lets an explicit per-user role win over the first-user policy', function ():
     config()->set('installer.user.role_driver', 'eloquent');
     config()->set('installer.user.first_user_is_admin', true);
 
-    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@x.test', 'secret-pass', role: 'editor'));
+    $user = (new UserAccountCreator)->create(new UserData('Ada', 'ada@x.test', TestCredentials::password('installer-user'), role: 'editor'));
 
     expect($user->role)->toBe('editor');
 });
